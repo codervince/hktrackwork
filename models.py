@@ -42,10 +42,10 @@ class Horse(ModelBase):
     Code = Column(String(6), nullable=False, unique=True)
     Name = Column(String(255), nullable=False)
     Homecountry = Column('Homecountry', String(3), nullable=False)
-    ImportType = Column(String(10))
-    SireName = Column(String(255))
-    DamName = Column(String(255))
-    DamSireName = Column(String(255))
+    ImportType = Column(String(10), default="")
+    SireName = Column(String(255), default="")
+    DamName = Column(String(255), default="")
+    DamSireName = Column(String(255), default="")
     UniqueConstraint('Code', 'Homecountry', name='Horsecodehomecountry_uidx')
 
 class HKTrackwork(ModelBase):
@@ -84,6 +84,7 @@ class HKRace(ModelBase):
     Racecoursecode = Column('Racecoursecode', String, CheckConstraint('Racecoursecode in ("HV", "ST")'), nullable=False)
     RaceDate = Column('RaceDate', String, nullable=False)
     RaceNumber = Column('RaceNumber', String, nullable=False)
+    RaceIndex = Column('RaceIndex', String, nullable=False)
 
 
 class HKRunner(ModelBase):

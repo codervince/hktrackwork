@@ -6,12 +6,14 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 from collections import defaultdict
+from datetime import datetime
 
 from sqlalchemy.orm import sessionmaker, exc
 
 from hkjc.models import *
-
 from hkjc.items import *
+
+def_time = datetime(year=1900, month=1, day=1).time()
 
 
 class SQLAlchemyPipeline(object):
@@ -49,12 +51,14 @@ class SQLAlchemyPipeline(object):
                                                         }))
 
         if isinstance(item, ResultsItem):
-            trackwork = HKRunner(Raceid=self.get_id(session, HKRace, "id", {"Url": item["Url"],
-                                                                            "Racecoursecode": item["Racecoursecode"],
-                                                                            "RaceDate": item["Racedate"],
-                                                                            "RaceNumber": item["Racenumber"]}),
+            trackwork = HKRunner(Raceid=self.get_id(session, HKRace, "RaceIndex", {"Url": item["Url"],
+                                                                                   "Racecoursecode": item["Racecoursecode"],
+                                                                                   "RaceDate": item["Racedate"],
+                                                                                   "RaceNumber": item["Racenumber"],
+                                                                                   "RaceIndex": item["Racecoursecode"] + item[
+                                                                                       "Racedate"] + item["Racenumber"]}),
                                  Horseid=self.get_id(session, Horse, "Code",
-                                                     {"Code": item["HorseCode"], "Name": item["HorseName"],
+                                                     {"Code": item["Horsecode"], "Name": item["Horse"],
                                                       "Homecountry": "HKG"}),
                                  HorseNo=item["HorseNo"],
                                  Jockeyid=self.get_id(session, Jockey, "Name",
@@ -67,22 +71,21 @@ class SQLAlchemyPipeline(object):
                                  DeclarHorseWt=item["DeclarHorseWt"],
                                  Draw=item["Draw"],
                                  LBW=item["LBW"],
-                                 RunningPosition=item["RunningPosition"],
-                                 Sec1DBL=item["Sec1DBL"],
-                                 Sec2DBL=item["Sec2DBL"],
-                                 Sec3DBL=item["Sec3DBL"],
-                                 Sec4DBL=item["Sec4DBL"],
-                                 Sec5DBL=item["Sec5DBL"],
-                                 Sec6DBL=item["Sec6DBL"],
-                                 FinishTime=item["Finishtime"],
-                                 Sec1Time=item["Sec1time"],
-                                 Sec2Time=item["Sec2time"],
-                                 Sec3Time=item["Sec3time"],
-                                 Sec4Time=item["Sec4time"],
-                                 Sec5Time=item["Sec5time"],
-                                 Sec6Time=item["Sec6time"],
-                                 Winodds=item["WinOdds"],
-            )
+                                 RunningPosition=item.get("Runningposition", ""),
+                                 Sec1DBL=item.get("Sec1DBL", ""),
+                                 Sec2DBL=item.get("Sec2DBL", ""),
+                                 Sec3DBL=item.get("Sec3DBL", ""),
+                                 Sec4DBL=item.get("Sec4DBL", ""),
+                                 Sec5DBL=item.get("Sec5DBL", ""),
+                                 Sec6DBL=item.get("Sec6DBL", ""),
+                                 FinishTime=item.get("Finishtime", def_time),
+                                 Sec1Time=item.get("Sec1time", def_time),
+                                 Sec2Time=item.get("Sec2time", def_time),
+                                 Sec3Time=item.get("Sec3time", def_time),
+                                 Sec4Time=item.get("Sec4time", def_time),
+                                 Sec5Time=item.get("Sec5time", def_time),
+                                 Sec6Time=item.get("Sec6time", def_time),
+                                 WinOdds=item.get("Winodds", ""))
 
         session.add(trackwork)
         session.commit()

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import scrapy
+from scrapy import log
 from scrapy.http import Request
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.loader import ItemLoader
-from scrapy.contrib.loader.processor import TakeFirst, Compose
+from scrapy.contrib.loader.processor import TakeFirst, Compose, Join
 from hkjc.items import ResultsItem
 from datetime import datetime
+from time import sleep
 
 def timeprocessor(value):
     for format in ("%S.%f", "%M.%S.%f", "%S"):
@@ -15,11 +17,16 @@ def timeprocessor(value):
             pass
     return None
 
+def try_float(value):
+    try:
+        return float(value)
+    except:
+        return 0.0
 
 class ResultsItemsLoader(ItemLoader):
     default_item_class = ResultsItem
     default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)
-    Winodds_out = Compose(default_output_processor, float)
+    Winodds_out = Compose(default_output_processor, try_float)
     Finishtime_out = Compose(default_output_processor, timeprocessor)
     Sec1time_out = Compose(default_output_processor, timeprocessor)
     Sec2time_out = Compose(default_output_processor, timeprocessor)
@@ -27,8 +34,7 @@ class ResultsItemsLoader(ItemLoader):
     Sec4time_out = Compose(default_output_processor, timeprocessor)
     Sec5time_out = Compose(default_output_processor, timeprocessor)
     Sec6time_out = Compose(default_output_processor, timeprocessor)
-    WinOdds_out = Compose(default_output_processor, timeprocessor)
- 
+    Runningposition_out = Join(" ")
     
 
 class ResultsSpider(scrapy.Spider):
@@ -43,38 +49,38 @@ class ResultsSpider(scrapy.Spider):
         self.racecode = coursecode
 
     def parse(self, response):
-        """
         if not len(response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']")):
+            log.msg("Results page not ready, waiting 2 secs...", logLevel=log.INFO)
+            sleep(2)
             yield Request(response.url, dont_filter=True)
         else:
-        """
-        # for link in LinkExtractor(restrict_xpaths="//div[contains(@class,'raceNum')]").extract_links(response)[:-1]:
-        #     yield Request(link.url)
-        table_data = list()
-        for tr in response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']"):
-            l = ResultsItemsLoader(selector=tr)
-            l.add_value("Url", response.url)
-            dd = response.url.split("/")
-            l.add_value("Racedate", dd[-3])
-            l.add_value("Racecoursecode", dd[-2])
-            l.add_value("Racenumber", dd[-1])
-            l.add_xpath("Place", "./td[1]/text()")
-            l.add_xpath("HorseNo", "./td[2]/text()")
-            l.add_xpath("Horse", "./td[3]/a/text()")
-            l.add_xpath("Horsecode", "./td[3]/text()", re="\((.+?)\)")
-            l.add_xpath("Jockey", "./td[4]/a/text()")
-            l.add_xpath("Trainer", "./td[5]/a/text()")
-            l.add_xpath("ActualWt", "./td[6]/text()")
-            l.add_xpath("DeclarHorseWt", "./td[7]/text()")
-            l.add_xpath("Draw", "./td[8]/text()")
-            l.add_xpath("LBW", "./td[9]/text()")
-            l.add_xpath("Runningposition", "./td[10]/text()")
-            l.add_xpath("Finishtime", "./td[11]/text()")
-            l.add_xpath("Winodds", "./td[12]/text()")
-            i = l.load_item()
-            table_data.append(i)
-        for link in LinkExtractor(restrict_xpaths="//img[contains(@src,'sectional_time')]/..").extract_links(response):
-            yield Request(link.url, callback=self.parse_sectional, meta=dict(table_data=table_data))
+            for link in LinkExtractor(restrict_xpaths="//div[contains(@class,'raceNum')]").extract_links(response)[:-1]:
+                yield Request(link.url)
+            table_data = list()
+            for tr in response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']"):
+                l = ResultsItemsLoader(selector=tr)
+                l.add_value("Url", response.url)
+                dd = response.url.split("/")
+                l.add_value("Racedate", dd[-3])
+                l.add_value("Racecoursecode", dd[-2])
+                l.add_value("Racenumber", dd[-1])
+                l.add_xpath("Place", "./td[1]/text()")
+                l.add_xpath("HorseNo", "./td[2]/text()")
+                l.add_xpath("Horse", "./td[3]/a/text()")
+                l.add_xpath("Horsecode", "./td[3]/text()", re="\((.+?)\)")
+                l.add_xpath("Jockey", "./td[4]/a/text()")
+                l.add_xpath("Trainer", "./td[5]/a/text()")
+                l.add_xpath("ActualWt", "./td[6]/text()")
+                l.add_xpath("DeclarHorseWt", "./td[7]/text()")
+                l.add_xpath("Draw", "./td[8]/text()")
+                l.add_xpath("LBW", "./td[9]/text()")
+                l.add_xpath("Runningposition", "./td[10]//td/text()")
+                l.add_xpath("Finishtime", "./td[11]/text()")
+                l.add_xpath("Winodds", "./td[12]/text()")
+                i = l.load_item()
+                table_data.append(i)
+            for link in LinkExtractor(restrict_xpaths="//img[contains(@src,'sectional_time')]/..").extract_links(response):
+                yield Request(link.url, callback=self.parse_sectional, meta=dict(table_data=table_data))
 
     def parse_sectional(self, response):
         table_data = response.meta["table_data"]

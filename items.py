@@ -7,7 +7,6 @@
 
 import scrapy
 
-
 class HorseItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
@@ -45,11 +44,11 @@ class ResultsItem(scrapy.Item):
     Winodds = scrapy.Field()
     #sectionals page
     Sec1DBL = scrapy.Field()  #not nullable e.g. 3/4 , 1/1/4 top right of '1st Sec', '2nd Sec' box
-    Sec1time = scrapy.Field() # not nullable hh:mm:ss.nn (always < 1min) Time object e.g. '00:00:13.24'
+    Sec1time = scrapy.Field() #Time object e.g. '00:00:13.24'
     Sec2DBL = scrapy.Field() #not nullable
-    Sec2time = scrapy.Field() # not nullable hh:mm:ss.nn (always < 1min) Time object e.g. '00:00:13.24'
+    Sec2time = scrapy.Field() #Time object e.g. '00:00:13.24'
     Sec3DBL = scrapy.Field() #not nullable
-    Sec3time = scrapy.Field() # not nullable hh:mm:ss.nn (always < 1min) Time object e.g. '00:00:13.24'
+    Sec3time = scrapy.Field() #Time object e.g. '00:00:13.24'
     Sec4DBL = scrapy.Field() #can be null
     Sec4time = scrapy.Field()#can be null
     Sec5DBL = scrapy.Field() #can be null
