@@ -39,15 +39,16 @@ ITEM_PIPELINES = {
       dialect and/or the DBAPI upon connect.
 
 """
+"""
 DATABASE = {'drivername': 'postgres',
             'host': 'localhost',
             'port': '5432',
             'username': 'vmac',
             'password': '',
             'database': 'hkraces2'}
-
+"""
 #mysql testing
-# DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
+DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

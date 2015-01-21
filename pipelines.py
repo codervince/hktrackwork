@@ -11,6 +11,8 @@ from sqlalchemy.orm import sessionmaker, exc
 
 from hkjc.models import *
 
+from hkjc.items import *
+
 
 class SQLAlchemyPipeline(object):
     def __init__(self):
@@ -19,26 +21,69 @@ class SQLAlchemyPipeline(object):
         self.Session = sessionmaker(bind=engine)
         self.cache = defaultdict(lambda: defaultdict(lambda: None))
 
-        #TODO: get horsecolors!
-    def process_item(self, item, spider):
-        session = self.Session()
+        # TODO: get horsecolors!
 
-        trackwork = HKTrackwork(EventDate=item["EventDate"],
-                                EventVenue=item["EventVenue"],
-                                EventDescription=item["EventDescription"],
-                                # ImportType=item["ImportType"],
-                                # SireName=item["SireName"],
-                                # DamName=item["DamName"],
-                                # DamSireName=item["DamSireName"],
-                                EventTypeid=self.get_id(session, EventType, "Name", {"Name": item["EventType"]}),
-                                Ownerid=self.get_id(session, Owner, "Name", {"Name": item["Owner"], "Homecountry": item["Homecountry"]}),
-                                Gearid=self.get_id(session, Gear, "Name", {"Name": item["Gear"]}),
-                                Horseid=self.get_id(session, Horse, "Code",
-                                                      {"Code": item["HorseCode"], "Name": item["HorseName"], \
-                                                      "Homecountry": item["Homecountry"],\
-                                                      "SireName": item["SireName"], "DamName": item["DamName"], \
-                                                      "DamSireName": item["DamSireName"], "ImportType": item["ImportType"]          
-                                                      }        ))
+    def process_item(self, item, spider):
+        if not isinstance(item, (HorseItem, ResultsItem)):
+            return item
+
+        session = self.Session()
+        if isinstance(item, HorseItem):
+            trackwork = HKTrackwork(EventDate=item["EventDate"],
+                                    EventVenue=item["EventVenue"],
+                                    EventDescription=item["EventDescription"],
+                                    # ImportType=item["ImportType"],
+                                    # SireName=item["SireName"],
+                                    # DamName=item["DamName"],
+                                    # DamSireName=item["DamSireName"],
+                                    EventTypeid=self.get_id(session, EventType, "Name", {"Name": item["EventType"]}),
+                                    Ownerid=self.get_id(session, Owner, "Name",
+                                                        {"Name": item["Owner"], "Homecountry": item["Homecountry"]}),
+                                    Gearid=self.get_id(session, Gear, "Name", {"Name": item["Gear"]}),
+                                    Horseid=self.get_id(session, Horse, "Code",
+                                                        {"Code": item["HorseCode"], "Name": item["HorseName"], \
+                                                         "Homecountry": item["Homecountry"], \
+                                                         "SireName": item["SireName"], "DamName": item["DamName"], \
+                                                         "DamSireName": item["DamSireName"],
+                                                         "ImportType": item["ImportType"]
+                                                        }))
+
+        if isinstance(item, ResultsItem):
+            trackwork = HKRunner(Raceid=self.get_id(session, HKRace, "id", {"Url": item["Url"],
+                                                                            "Racecoursecode": item["Racecoursecode"],
+                                                                            "RaceDate": item["Racedate"],
+                                                                            "RaceNumber": item["Racenumber"]}),
+                                 Horseid=self.get_id(session, Horse, "Code",
+                                                     {"Code": item["HorseCode"], "Name": item["HorseName"],
+                                                      "Homecountry": "HKG"}),
+                                 HorseNo=item["HorseNo"],
+                                 Jockeyid=self.get_id(session, Jockey, "Name",
+                                                      {"Name": item["Jockey"], "Homecountry": "HKG"}),
+                                 Trainerid=self.get_id(session, Trainer, "Name",
+                                                       {"Name": item["Trainer"], "Homecountry": "HKG"}),
+                                 Jockey=item["Jockey"],
+                                 Trainer=item["Trainer"],
+                                 ActualWt=item["ActualWt"],
+                                 DeclarHorseWt=item["DeclarHorseWt"],
+                                 Draw=item["Draw"],
+                                 LBW=item["LBW"],
+                                 RunningPosition=item["RunningPosition"],
+                                 Sec1DBL=item["Sec1DBL"],
+                                 Sec2DBL=item["Sec2DBL"],
+                                 Sec3DBL=item["Sec3DBL"],
+                                 Sec4DBL=item["Sec4DBL"],
+                                 Sec5DBL=item["Sec5DBL"],
+                                 Sec6DBL=item["Sec6DBL"],
+                                 FinishTime=item["Finishtime"],
+                                 Sec1Time=item["Sec1time"],
+                                 Sec2Time=item["Sec2time"],
+                                 Sec3Time=item["Sec3time"],
+                                 Sec4Time=item["Sec4time"],
+                                 Sec5Time=item["Sec5time"],
+                                 Sec6Time=item["Sec6time"],
+                                 Winodds=item["WinOdds"],
+            )
+
         session.add(trackwork)
         session.commit()
         return item
