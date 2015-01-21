@@ -47,7 +47,7 @@ DATABASE = {'drivername': 'postgres',
             'database': 'hkraces2'}
 
 #mysql testing
-# DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
+#DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
