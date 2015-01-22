@@ -55,3 +55,30 @@ class ResultsItem(scrapy.Item):
     Sec5time = scrapy.Field() #can be null
     Sec6DBL = scrapy.Field() #can be null
     Sec6time = scrapy.Field() #can be null
+
+class RaceItem(scrapy.Item):
+    Racenumber = scrapy.Field()
+    Raceindex = scrapy.Field()
+    Racename = scrapy.Field()
+    Going = scrapy.Field()
+    Prizemoney = scrapy.Field()
+    Racereplay = scrapy.Field()
+    #image_urls = scrapy.Field()
+    #images = scrapy.Field()
+    # File_urls = scrapy.Field()
+    # files = scrapy.Field()
+    Windiv = scrapy.Field()
+    Place1div = scrapy.Field()
+    Place2div = scrapy.Field()
+    Place3div = scrapy.Field()
+    QNdiv = scrapy.Field()
+    QP12div = scrapy.Field()
+    QP13div = scrapy.Field()
+    QP23div = scrapy.Field()
+    Tiercediv = scrapy.Field()
+    Triodiv = scrapy.Field()
+    Firstfourdiv = scrapy.Field()
+    Thisdouble11div = scrapy.Field()
+    Thisdouble12div = scrapy.Field()
+    Incidentreport = scrapy.Field()
+    Horsereport = scrapy.Field()

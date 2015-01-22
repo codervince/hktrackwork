@@ -79,9 +79,10 @@ class Trainer(ModelBase):
 
 class HKRace(ModelBase):
     __tablename__ = "hk_race"
+    __tableargs__ = ( CheckConstraint('Racecoursecode in ("HV", "ST")'))
     id = Column(Integer, primary_key=True)
     Url = Column('url', String)
-    Racecoursecode = Column('Racecoursecode', String, CheckConstraint('Racecoursecode in ("HV", "ST")'), nullable=False)
+    Racecoursecode = Column('Racecoursecode', String, nullable=False)
     RaceDate = Column('RaceDate', String, nullable=False)
     RaceNumber = Column('RaceNumber', String, nullable=False)
     RaceIndex = Column('RaceIndex', String, nullable=False)
@@ -106,14 +107,14 @@ class HKRunner(ModelBase):
     ActualWt= Column('ActualWt', Integer, nullable=False)
     DeclarHorseWt= Column('DeclarHorseWt', Integer, nullable=False)
     Draw= Column('Draw', Integer, nullable=False)
-    LBW= Column('LBW', String, nullable=False)
+    LBW= Column('LBW', Float, nullable=False)
     RunningPosition= Column('RunningPosition', String, nullable=False)
-    Sec1DBL = Column('Sec1DBL', String, nullable=False)
-    Sec2DBL = Column('Sec2DBL', String, nullable=False)
-    Sec3DBL = Column('Sec3DBL', String, nullable=False)
-    Sec4DBL = Column('Sec4DBL', String, nullable=False)
-    Sec5DBL = Column('Sec5DBL', String, nullable=False)
-    Sec6DBL = Column('Sec6DBL', String, nullable=False)
+    Sec1DBL = Column('Sec1DBL', Float, nullable=False)
+    Sec2DBL = Column('Sec2DBL', Float, nullable=False)
+    Sec3DBL = Column('Sec3DBL', Float, nullable=False)
+    Sec4DBL = Column('Sec4DBL', Float, nullable=False)
+    Sec5DBL = Column('Sec5DBL', Float, nullable=False)
+    Sec6DBL = Column('Sec6DBL', Float, nullable=False)
     FinishTime= Column('FinishTime', Time, nullable=False)  #e.g. 1.49.08 --> '00:01:49.08' hhmmss.nn always < 5mins
     Sec1Time = Column('Sec1Time', Time, nullable=False)
     Sec2Time = Column('Sec2Time', Time, nullable=False)
