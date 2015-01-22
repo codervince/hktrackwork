@@ -14,7 +14,7 @@ from hkjc.models import *
 from hkjc.items import *
 
 def_time = datetime(year=1900, month=1, day=1).time()
-
+def_DBL = None 
 
 class SQLAlchemyPipeline(object):
     def __init__(self):
@@ -71,13 +71,13 @@ class SQLAlchemyPipeline(object):
                                  DeclarHorseWt=item["DeclarHorseWt"],
                                  Draw=item["Draw"],
                                  LBW=item["LBW"],
-                                 RunningPosition=item.get("Runningposition", ""),
-                                 Sec1DBL=item.get("Sec1DBL", ""),
-                                 Sec2DBL=item.get("Sec2DBL", ""),
-                                 Sec3DBL=item.get("Sec3DBL", ""),
-                                 Sec4DBL=item.get("Sec4DBL", ""),
-                                 Sec5DBL=item.get("Sec5DBL", ""),
-                                 Sec6DBL=item.get("Sec6DBL", ""),
+                                 RunningPosition=item.get("Runningposition", None),
+                                 Sec1DBL=item.get("Sec1DBL", def_DBL),
+                                 Sec2DBL=item.get("Sec2DBL", def_DBL),
+                                 Sec3DBL=item.get("Sec3DBL", def_DBL),
+                                 Sec4DBL=item.get("Sec4DBL", def_DBL),
+                                 Sec5DBL=item.get("Sec5DBL", def_DBL),
+                                 Sec6DBL=item.get("Sec6DBL", def_DBL),
                                  FinishTime=item.get("Finishtime", def_time),
                                  Sec1Time=item.get("Sec1time", def_time),
                                  Sec2Time=item.get("Sec2time", def_time),
@@ -85,7 +85,7 @@ class SQLAlchemyPipeline(object):
                                  Sec4Time=item.get("Sec4time", def_time),
                                  Sec5Time=item.get("Sec5time", def_time),
                                  Sec6Time=item.get("Sec6time", def_time),
-                                 WinOdds=item.get("Winodds", ""))
+                                 WinOdds=item.get("Winodds", None))
 
         session.add(trackwork)
         session.commit()

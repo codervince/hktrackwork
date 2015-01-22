@@ -30,8 +30,7 @@ def timeprocessor(value):
  #add Fractionprocessor here to convert fractions to ints for SecDBL and LBW  
 def horselengthprocessor(value):
     #covers '' and '-'
-    if value == ' ':
-        return None
+
     if value == '---':
         return None
     elif value == '-':
