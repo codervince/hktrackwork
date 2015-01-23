@@ -44,7 +44,7 @@ DATABASE = {'drivername': 'postgres',
             'port': '5432',
             'username': 'vmac',
             'password': '',
-            'database': 'hkracestwr'}
+            'database': 'hkraces2'}
 
 #mysql testing
 #DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
@@ -52,3 +52,8 @@ DATABASE = {'drivername': 'postgres',
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Googlebot/2.1 ( http://www.google.com/bot.html)"
+
+#npt filter dups default 'scrapy.dupefilter.RFPDupeFilter'
+DUPEFILTER_CLASS = 'scrapy.dupefilter.BaseDupeFilter' 
+
+# LOG_FILE = 

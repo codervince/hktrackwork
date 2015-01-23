@@ -11,6 +11,10 @@ from time import sleep
 from fractions import Fraction
 import re
 
+def getHorseReport(ir, h):
+    lir = ir.split('.')
+    return [e.replace(".\\n", "...") for e in lir if h in e]
+
 
 #done in default output processor?
 def noentryprocessor(value):
@@ -31,7 +35,7 @@ def timeprocessor(value):
 def horselengthprocessor(value):
     #covers '' and '-'
 
-    if value == '---':
+    if '---' in value:
         return None
     elif value == '-':
         #winner
@@ -63,10 +67,15 @@ def try_float(value):
     except:
         return 0.0
 
+def try_int(value):
+    try:
+        return int(value)
+    except:
+        return 0    
 
-# class RaceItemsLoader(ItemLoader):
-#     default_item_class = RaceItem
-#     default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)        
+class RaceItemsLoader(ItemLoader):
+    default_item_class = RaceItem
+    default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)        
 
 class ResultsItemsLoader(ItemLoader):
     default_item_class = ResultsItem
@@ -80,6 +89,7 @@ class ResultsItemsLoader(ItemLoader):
     Sec5time_out = Compose(default_output_processor, timeprocessor)
     Sec6time_out = Compose(default_output_processor, timeprocessor)
     LBW_out = Compose(default_output_processor, horselengthprocessor)
+    Draw_out = Compose(default_output_processor, try_int)
     HorseNo_out = Compose(default_output_processor, noentryprocessor)
     Sec1DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec2DBL_out = Compose(default_output_processor, horselengthprocessor)
@@ -101,6 +111,7 @@ class ResultsSpider(scrapy.Spider):
         self.racedate = date
         self.racecode = coursecode
 
+
     def parse(self, response):
         if not len(response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']")):
             log.msg("Results page not ready, waiting 2 secs...", logLevel=log.INFO)
@@ -112,9 +123,9 @@ class ResultsSpider(scrapy.Spider):
             table_data = list()
             #Race ItemsLoader
             # rl = RaceItemsLoader(response=response)
-            # rl.add_value("Raceindex", re.search(r"\(([0-9]+)\)", response.xpath('/html/body/div[2]/div[2]/div[2]/div[5]/div[1]/text()').extract()[0]).group(1))
-            # rl.add_value("Prizemoney", re.sub("\D", "", response.xpath('//td[@class="number14"]/text()').extract()[0]))
-            # rl.add_xpath("Windiv",'//td[@class= "number14 tdAlignR"]/text()') 
+            # l.add_value("Raceindex", re.search(r"\(([0-9]+)\)", response.xpath('/html/body/div[2]/div[2]/div[2]/div[5]/div[1]/text()').extract()[0]).group(1))
+            # l.add_value("Prizemoney", re.sub("\D", "", response.xpath('//td[@class="number14"]/text()').extract()[0]))
+            # l.add_xpath("Windiv",'//td[@class= "number14 tdAlignR"]/text()') 
             # j = rl.load_item()
             # table_data.append(j)
             
@@ -122,26 +133,48 @@ class ResultsSpider(scrapy.Spider):
                 l = ResultsItemsLoader(selector=tr)
                 l.add_value("Url", response.url)
                 dd = response.url.split("/")
-                l.add_value("Racedate", dd[-3])
-                l.add_value("Racecoursecode", dd[-2])
-                l.add_value("Racenumber", dd[-1])
+                l.add_value("RaceDate", dd[-3])
+                l.add_value("RacecourseCode", dd[-2])
+                l.add_value("RaceNumber", dd[-1])
+                #racedata table: response.xpath('//table[contains(@class, \"tableBorder0 font13\")]').extract()
+                l.add_value("RaceIndex", re.search(r"\(([0-9]+)\)", response.xpath('/html/body/div[2]/div[2]/div[2]/div[5]/div[1]/text()').extract()[0]).group(1))
+                l.add_value("Prizemoney", re.sub("\D", "", response.xpath('//td[@class="number14"]/text()').extract()[0]))
+                l.add_value("Going", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[3]/text()').extract()[0])
+                l.add_value("Surface", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0].split('-')[0].strip())
+                l.add_value("Railtype", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0].split('-')[1].strip())
+                l.add_value("Raceclass", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/text()').extract()[0].split('-')[0].strip())
+                l.add_value("Distance", re.sub("\D", "", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/span/text()').extract()[0].split('-')[0].strip()))
+                if "class" in response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/text()').extract()[0].split('-')[0].strip():
+                    rs = response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/span/text()').extract()[0].split('- ')[1].strip()
+                    l.add_value("Raceratingspan", re.sub(r'([^\s\w-]|_)+', '',rs).strip().split(u" ")[0].replace("Rating", ""))
+                else:
+                    l.add_value("Raceratingspan", None)                
+                #get incident report
+                # l.add_value("Incidentreport", response.xpath("//td[contains(text(), \"Racing Incident Report\")]/following::tr/td/text()").extract()[0].strip())
+                ir = response.xpath("//td[contains(text(), \"Racing Incident Report\")]/following::tr/td/text()").extract()[0].strip()
+                h = tr.xpath("./td[3]/a/text()").extract()[0]
+                l.add_value("HorseReport", '..'.join(getHorseReport(ir, h)))
+                l.add_value("IncidentReport", ir)
+                #table starts here
                 l.add_xpath("Place", "./td[1]/text()")
-                l.add_xpath("HorseNo", "./td[2]/text()")
+                l.add_xpath("HorseNumber", "./td[2]/text()")
                 l.add_xpath("Horse", "./td[3]/a/text()")
-                l.add_xpath("Horsecode", "./td[3]/text()", re="\((.+?)\)")
+                l.add_xpath("HorseCode", "./td[3]/text()", re="\((.+?)\)")
                 l.add_xpath("Jockey", "./td[4]/a/text()")
                 l.add_xpath("Trainer", "./td[5]/a/text()")
                 l.add_xpath("ActualWt", "./td[6]/text()")
                 l.add_xpath("DeclarHorseWt", "./td[7]/text()")
                 l.add_xpath("Draw", "./td[8]/text()")
                 l.add_xpath("LBW", "./td[9]/text()")
-                l.add_xpath("Runningposition", "./td[10]//td/text()")
-                l.add_xpath("Finishtime", "./td[11]/text()")
+                l.add_xpath("RunningPosition", "./td[10]//td/text()")
+                l.add_xpath("FinishTime", "./td[11]/text()")
                 l.add_xpath("Winodds", "./td[12]/text()")
                 i = l.load_item()
                 table_data.append(i)
             for link in LinkExtractor(restrict_xpaths="//img[contains(@src,'sectional_time')]/..").extract_links(response):
                 yield Request(link.url, callback=self.parse_sectional, meta=dict(table_data=table_data))
+
+
 
     def parse_sectional(self, response):
         table_data = response.meta["table_data"]

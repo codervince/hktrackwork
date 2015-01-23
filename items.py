@@ -26,21 +26,21 @@ class HorseItem(scrapy.Item):
 
 class ResultsItem(scrapy.Item):
     Url = scrapy.Field()
-    Racecoursecode = scrapy.Field()
-    Racedate = scrapy.Field()
-    Racenumber = scrapy.Field()
+    RacecourseCode = scrapy.Field()
+    RaceDate = scrapy.Field()
+    RaceNumber = scrapy.Field()
     Place = scrapy.Field()
-    HorseNo = scrapy.Field()
+    HorseNumber = scrapy.Field()
     Horse = scrapy.Field()
-    Horsecode = scrapy.Field()
+    HorseCode = scrapy.Field()
     Jockey = scrapy.Field()
     Trainer = scrapy.Field()
     ActualWt = scrapy.Field()
     DeclarHorseWt = scrapy.Field()
     Draw = scrapy.Field()
     LBW = scrapy.Field()
-    Runningposition = scrapy.Field()
-    Finishtime = scrapy.Field()
+    RunningPosition = scrapy.Field()
+    FinishTime = scrapy.Field()
     Winodds = scrapy.Field()
     #sectionals page
     Sec1DBL = scrapy.Field()  #not nullable e.g. 3/4 , 1/1/4 top right of '1st Sec', '2nd Sec' box
@@ -55,13 +55,21 @@ class ResultsItem(scrapy.Item):
     Sec5time = scrapy.Field() #can be null
     Sec6DBL = scrapy.Field() #can be null
     Sec6time = scrapy.Field() #can be null
-
-class RaceItem(scrapy.Item):
-    Racenumber = scrapy.Field()
-    Raceindex = scrapy.Field()
-    Racename = scrapy.Field()
+    RaceIndex = scrapy.Field()
+    RaceName = scrapy.Field()
     Going = scrapy.Field()
     Prizemoney = scrapy.Field()
+    Raceratingspan = scrapy.Field()
+    Surface = scrapy.Field()
+    Railtype = scrapy.Field()
+    Raceclass = scrapy.Field()
+    Distance = scrapy.Field()
+    HorseReport = scrapy.Field()
+    IncidentReport = scrapy.Field()
+    #public race index is an artifical field 
+
+
+class RaceItem(scrapy.Item):
     Racereplay = scrapy.Field()
     #image_urls = scrapy.Field()
     #images = scrapy.Field()

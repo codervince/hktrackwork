@@ -27,13 +27,39 @@ class Owner(ModelBase):
     id = Column(Integer, primary_key=True)
     Name = Column(String(255), unique=True)
     Homecountry = Column('Homecountry', String(3), nullable=False)
-    UniqueConstraint('Name', name='Ownername_uidx')
+    UniqueConstraint('Name', name='OwnerName_uidx')
 
 class Gear(ModelBase):
     __tablename__ = "hk_gear"
     id = Column(Integer, primary_key=True)
     Name = Column(String(255), unique=True)
-    UniqueConstraint('Name', name='Gear_uidx')
+    UniqueConstraint('Name', name='GearName_uidx')
+
+class Going(ModelBase):
+    __tablename__ = "hk_going"
+    id = Column(Integer, primary_key=True)
+    Name = Column(String(255), unique=True)
+    UniqueConstraint('Name', name='GoingName_uidx')
+
+class Raceclass(ModelBase):
+    __tablename__ = "hk_raceclass"
+    id = Column(Integer, primary_key=True)
+    Name = Column(String(255), unique=True)
+    UniqueConstraint('Name', name='RaceClassName_uidx')
+
+class Distance(ModelBase):
+    __tablename__= "hk_distance"
+    id = Column(Integer, primary_key=True)
+    MetricName = Column(Integer)
+    Miles = Column(Float)
+    Furlongs = Column(Integer) 
+    UniqueConstraint('Name', name='HKDistance_Name_uidx')
+
+class Railtype(ModelBase):
+    __tablename__= "hk_railtype"
+    id = Column(Integer, primary_key=True)
+    Name = Column(String(256))
+    UniqueConstraint('Name', name='HKRailType_Name_uidx')
 
 class Horse(ModelBase):
     __tablename__ = "horse"
@@ -46,7 +72,7 @@ class Horse(ModelBase):
     SireName = Column(String(255), default="")
     DamName = Column(String(255), default="")
     DamSireName = Column(String(255), default="")
-    UniqueConstraint('Code', 'Homecountry', name='Horsecodehomecountry_uidx')
+    UniqueConstraint('Name', 'Code', 'Homecountry', name='Horsecodehomecountry_uidx')
 
 class HKTrackwork(ModelBase):
     __tablename__ = "hk_trackwork"
@@ -66,6 +92,7 @@ class Jockey(ModelBase):
     __tableargs__ = ( CheckConstraint('Homecountry in ("HKG", "SIN", "AUS", "NZL", "RSA". "ENG", "IRE", "DUB", "IRE", "SCO", "MAC")'))
     id = Column(Integer, primary_key=True)
     Name = Column(String(100), unique=True)
+    Code = Column(String(10))
     Homecountry = Column('Homecountry', String(3), nullable=False)
     UniqueConstraint('Name', name='JockeyName_uidx')
 
@@ -74,36 +101,67 @@ class Trainer(ModelBase):
     __tableargs__ = ( CheckConstraint('Homecountry in ("HKG", "SIN", "AUS", "NZL", "RSA". "ENG", "IRE", "DUB", "IRE", "SCO", "MAC")'))
     id = Column(Integer, primary_key=True)
     Name = Column(String(255), unique=True)
+    Code = Column(String(10))
     Homecountry = Column('Homecountry', String(3), nullable=False)
     UniqueConstraint('Name', name='Trainername_uidx')
 
 class HKRace(ModelBase):
     __tablename__ = "hk_race"
-    __tableargs__ = ( CheckConstraint('Racecoursecode in ("HV", "ST")'))
+    __tableargs__ = ( CheckConstraint('RacecourseCode in ("HV", "ST")'))
     id = Column(Integer, primary_key=True)
     Url = Column('url', String)
-    Racecoursecode = Column('Racecoursecode', String, nullable=False)
-    RaceDate = Column('RaceDate', String, nullable=False)
+    RacecourseCode = Column('RacecourseCode', String, nullable=False)
+    RaceDate = Column('RaceDate', String, nullable=True)
+    RaceDateTime = Column('RaceDateTime', Date, nullable=True)
     RaceNumber = Column('RaceNumber', String, nullable=False)
-    RaceIndex = Column('RaceIndex', String, nullable=False)
+    PublicRaceIndex = Column('PublicRaceIndex', String, nullable=False)
+    RaceIndex = Column('RaceIndex', String, nullable=True)
+    IncidentReport = Column('IncidentReport', String, nullable=True)
+    Goingid = Column(Integer, ForeignKey("hk_going.id"))
+    Raceclassid = Column(Integer, ForeignKey("hk_raceclass.id"))
+    Distanceid = Column(Integer, ForeignKey("hk_distance.id"))
+    Railtypeid = Column(Integer, ForeignKey("hk_railtype.id"))
+    Raceratingspan = Column(String)
+    Prizemoney = Column(Integer)
+    Surface = Column('Surface', String)
+    UniqueConstraint('PublicRaceIndex', name='HKRace_PublicRaceIndex_uidx') 
 
+class HKDividend(ModelBase):
+    __tablename__ = "hk_dividend"
+    id = Column(Integer, primary_key=True)
+    Raceid = Column(Integer, ForeignKey("hk_race.id"))
+    WinDiv= Column(Float, nullable=False)
+    Place1div = Column(Float, nullable=False)
+    Place2div = Column(Float, nullable=False)
+    Place3div = Column(Float, nullable=False)
+    QNdiv = Column(Float, nullable=False)
+    QP12div = Column(Float, nullable=False)
+    QP13div = Column(Float, nullable=False)
+    QP23div = Column(Float, nullable=False)
+    Tiercediv = Column(Float, nullable=False)
+    Triodiv = Column(Float, nullable=False)
+    Firstfourdiv = Column(Float, nullable=False)
+    #optionals
+    Quartet = Column(Float)
+    ThisDouble11div = Column(Float)
+    ThisDouble12div = Column(Float)
+    Treble111div = Column(Float)
+    Treble112div = Column(Float)
+    ThisDoubleTriodiv = Column(Float)
+    SixUp = Column(Float)
+    JockeyChallenge = Column(Float)    
+    UniqueConstraint('Raceid', name='HKDividendRace_uidx') 
 
 class HKRunner(ModelBase):
     __tablename__ = "hk_runner"
     id = Column(Integer, primary_key=True)
     Raceid = Column(Integer, ForeignKey("hk_race.id"))
     Horseid = Column(Integer, ForeignKey("horse.id"))
-    HorseNo= Column('HorseNo', String, nullable=False)
+    HorseNumber= Column('HorseNumber', String, nullable=False)
     Jockeyid =Column(Integer, ForeignKey("jockey.id"))
     Trainerid =Column(Integer, ForeignKey("trainer.id"))
-    #horse id code + name + name + Homecountry='HKG'
-    # Horse= Column('Horse', String, nullable=False)
-    # HorseCode= Column('HorseCode', String, nullable=False)
-    #jockey name + Homecountry='HKG'
     Jockey= Column('Jockey', String, nullable=False)
-    #trainer name + name + Homecountry='HKG'
     Trainer= Column('Trainer', String, nullable=False)
-
     ActualWt= Column('ActualWt', Integer, nullable=False)
     DeclarHorseWt= Column('DeclarHorseWt', Integer, nullable=False)
     Draw= Column('Draw', Integer, nullable=False)
@@ -123,7 +181,22 @@ class HKRunner(ModelBase):
     Sec5Time = Column('Sec5Time', Time, nullable=True)
     Sec6Time = Column('Sec6Time', Time, nullable=True)
     WinOdds= Column('WinOdds', Float, nullable=False)
+    HorseReport = Column('HorseReport', String, nullable=True)
+    UniqueConstraint('Raceid', 'Horseno', 'Horseid', name='HKRunner_raceidhorsenohorseid_uidx')
 
+#OTHER TABLES
+
+class HKOdds(ModelBase):
+    __tablename__ = "hk_odds"
+    id = Column(Integer, primary_key=True)
+    Horsenumber = Column(Integer, nullable=False)
+    Updatedate = Column(Date, nullable=False)
+    Updatetime = Column(Time, nullable=False)
+    Winodds = Column(Float)
+    Placeodds = Column(Float)
+    Raceid = Column(Integer, ForeignKey("hk_race.id"))
+    # Horseid = Column(Integer, ForeignKey("horse.id"))
+    UniqueConstraint('Raceid', 'HorseNumber', 'UpdateDate', 'UpdateTime', name='HKOdds_RaceidHorseNoUpdateDateTime_uidx')
 
 def get_engine():
     return create_engine(URL(**settings.DATABASE))
