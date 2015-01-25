@@ -88,5 +88,3 @@ class RaceItem(scrapy.Item):
     Firstfourdiv = scrapy.Field()
     Thisdouble11div = scrapy.Field()
     Thisdouble12div = scrapy.Field()
-    Incidentreport = scrapy.Field()
-    Horsereport = scrapy.Field()

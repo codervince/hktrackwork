@@ -51,7 +51,32 @@ class SQLAlchemyPipeline(object):
                                                         }))
 
         if isinstance(item, ResultsItem):
-            trackwork = HKRunner(Raceid=self.get_id(session, HKRace, "RaceIndex", {"Url": item["Url"],
+
+
+            racework = HKRace(
+                Url=item["Url"],
+                RacecourseCode = item["RacecourseCode"],
+                RaceNumber =  item["RaceNumber"],       
+                Prizemoney = item["Prizemoney"],
+                Raceratingspan = item.get("Raceratingspan", None),
+                Surface=item["Surface"],
+                IncidentReport = item["IncidentReport"],
+                RaceIndex = item["RaceIndex"],
+                PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + item["RaceNumber"],
+                Raceclassid= self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
+                Railtypeid = self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
+                Goingid = self.get_id(session, Going, "Name", {"Name": item["Going"]}),
+                Distanceid = self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),"Miles": float(float(item["Distance"])/1600.0),
+                    "Furlongs": int(int(item["Distance"])/200) })
+                
+                )
+
+
+            trackwork = HKRunner(
+                                # Raceid =self.get_id(session, HKRace, "PublicRaceIndex", {"PublicRaceIndex": item["RacecourseCode"] + item[
+                                                                                       # "RaceDate"] + item["RaceNumber"]}),
+
+                                Raceid=self.get_id(session, HKRace, "RaceIndex", {"Url": item["Url"],
                                                                                    "RacecourseCode": item["RacecourseCode"],
                                                                                    "RaceDate": item["RaceDate"],
                                                                                    "RaceNumber": item["RaceNumber"],
@@ -61,22 +86,29 @@ class SQLAlchemyPipeline(object):
                                                                                    "IncidentReport": item["IncidentReport"],
                                                                                    "RaceIndex": item["RaceIndex"],
                                                                                    "PublicRaceIndex": item["RacecourseCode"] + item[
-                                                                                       "RaceDate"] + item["RaceNumber"]}
+                                                                                       "RaceDate"] + item["RaceNumber"],
+                                                                                    "Raceclassid": self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
+                                                                                    "Railtypeid": self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
+                                                                                    "Goingid": self.get_id(session, Going, "Name", {"Name": item["Going"]}),
+                                                                                    "Distanceid": self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),
+                                                                                    "Miles": float(float(item["Distance"])/1600.0),
+                                                                                    "Furlongs": int(int(item["Distance"])/200)
 
+                                    })   
 
-                                                                                       ),
+                                                                                       }),
                                  Horseid=self.get_id(session, Horse, "Code",
                                                      {"Code": item["HorseCode"], "Name": item["Horse"],
                                                       "Homecountry": "HKG"}),
 
-                                 Raceclassid=self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
-                                 Railtypeid=self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
-                                 Goingid=self.get_id(session, Going, "Name", {"Name": item["Going"]}),
-                                 Distanceid=self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),
-                                                                                    "Miles": float(float(item["Distance"])/1600.0),
-                                                                                    "Furlongs": int(int(item["Distance"])/200)
+                                 # Raceclassid=self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
+                                 # Railtypeid=self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
+                                 # Goingid=self.get_id(session, Going, "Name", {"Name": item["Going"]}),
+                                 # Distanceid=self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),
+                                                                                    # "Miles": float(float(item["Distance"])/1600.0),
+                                                                                    # "Furlongs": int(int(item["Distance"])/200)
 
-                                    }), 
+                                    # }), 
                                  HorseNumber=item["HorseNumber"],
                                  Jockeyid=self.get_id(session, Jockey, "Name",
                                                       {"Name": item["Jockey"], "Homecountry": "HKG"}),
@@ -103,13 +135,19 @@ class SQLAlchemyPipeline(object):
                                  Sec5Time=item.get("Sec5time", def_time),
                                  Sec6Time=item.get("Sec6time", def_time),
                                  WinOdds=item.get("Winodds", None),
-                                 Horsereport=item["HorseReport"]
+                                 HorseReport=item.get("HorseReport", None)
 
                                  ) 
+    
+        try:
+            session.add(trackwork)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
 
-        session.add(trackwork)
-        session.commit()
-        session.close()
         return item
 
     def get_id(self, session, model, unique, fields):

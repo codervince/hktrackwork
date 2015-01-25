@@ -23,6 +23,7 @@ def noentryprocessor(value):
 
 
 def timeprocessor(value):
+    #tries for each possible format
     for format in ("%S.%f", "%M.%S.%f", "%S"):
         try:
             return datetime.strptime(value, format).time()
@@ -60,6 +61,10 @@ def horselengthprocessor(value):
     else:
         return None   
 
+def didnotrun(value):
+    if "---" in value:
+        return None
+
 
 def try_float(value):
     try:
@@ -81,7 +86,7 @@ class ResultsItemsLoader(ItemLoader):
     default_item_class = ResultsItem
     default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)
     Winodds_out = Compose(default_output_processor, try_float)
-    Finishtime_out = Compose(default_output_processor, timeprocessor)
+    FinishTime_out = Compose(default_output_processor, timeprocessor)
     Sec1time_out = Compose(default_output_processor, timeprocessor)
     Sec2time_out = Compose(default_output_processor, timeprocessor)
     Sec3time_out = Compose(default_output_processor, timeprocessor)
@@ -90,14 +95,14 @@ class ResultsItemsLoader(ItemLoader):
     Sec6time_out = Compose(default_output_processor, timeprocessor)
     LBW_out = Compose(default_output_processor, horselengthprocessor)
     Draw_out = Compose(default_output_processor, try_int)
-    HorseNo_out = Compose(default_output_processor, noentryprocessor)
+    HorseNumber_out = Compose(default_output_processor, noentryprocessor)
     Sec1DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec2DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec3DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec4DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec5DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec6DBL_out = Compose(default_output_processor, horselengthprocessor)
-    Runningposition_out = Join(" ")
+    RunningPosition_out = Join(' ')
     
 
 class ResultsSpider(scrapy.Spider):
@@ -144,7 +149,7 @@ class ResultsSpider(scrapy.Spider):
                 l.add_value("Railtype", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0].split('-')[1].strip())
                 l.add_value("Raceclass", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/text()').extract()[0].split('-')[0].strip())
                 l.add_value("Distance", re.sub("\D", "", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/span/text()').extract()[0].split('-')[0].strip()))
-                if "class" in response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/text()').extract()[0].split('-')[0].strip():
+                if "Class" in response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/text()').extract()[0].split('-')[0].strip():
                     rs = response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/span/text()').extract()[0].split('- ')[1].strip()
                     l.add_value("Raceratingspan", re.sub(r'([^\s\w-]|_)+', '',rs).strip().split(u" ")[0].replace("Rating", ""))
                 else:
@@ -166,6 +171,7 @@ class ResultsSpider(scrapy.Spider):
                 l.add_xpath("DeclarHorseWt", "./td[7]/text()")
                 l.add_xpath("Draw", "./td[8]/text()")
                 l.add_xpath("LBW", "./td[9]/text()")
+                #incorrect RP
                 l.add_xpath("RunningPosition", "./td[10]//td/text()")
                 l.add_xpath("FinishTime", "./td[11]/text()")
                 l.add_xpath("Winodds", "./td[12]/text()")

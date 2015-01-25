@@ -54,6 +54,6 @@ DATABASE = {'drivername': 'postgres',
 USER_AGENT = "Googlebot/2.1 ( http://www.google.com/bot.html)"
 
 #npt filter dups default 'scrapy.dupefilter.RFPDupeFilter'
-DUPEFILTER_CLASS = 'scrapy.dupefilter.BaseDupeFilter' 
+# DUPEFILTER_CLASS = 'scrapy.dupefilter.BaseDupeFilter' 
 
 # LOG_FILE = 

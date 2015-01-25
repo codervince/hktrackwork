@@ -107,7 +107,8 @@ class Trainer(ModelBase):
 
 class HKRace(ModelBase):
     __tablename__ = "hk_race"
-    __tableargs__ = ( CheckConstraint('RacecourseCode in ("HV", "ST")'))
+    __tableargs__ = ( 
+        CheckConstraint('RacecourseCode in ("HV", "ST")'), UniqueConstraint('PublicRaceIndex'), {'autoload': True})
     id = Column(Integer, primary_key=True)
     Url = Column('url', String)
     RacecourseCode = Column('RacecourseCode', String, nullable=False)
@@ -160,13 +161,13 @@ class HKRunner(ModelBase):
     HorseNumber= Column('HorseNumber', String, nullable=False)
     Jockeyid =Column(Integer, ForeignKey("jockey.id"))
     Trainerid =Column(Integer, ForeignKey("trainer.id"))
-    Jockey= Column('Jockey', String, nullable=False)
-    Trainer= Column('Trainer', String, nullable=False)
-    ActualWt= Column('ActualWt', Integer, nullable=False)
-    DeclarHorseWt= Column('DeclarHorseWt', Integer, nullable=False)
-    Draw= Column('Draw', Integer, nullable=False)
-    LBW= Column('LBW', Float, nullable=False)
-    RunningPosition= Column('RunningPosition', String, nullable=False)
+    Jockey= Column('Jockey', String, nullable=True)
+    Trainer= Column('Trainer', String, nullable=True)
+    ActualWt= Column('ActualWt', Integer, nullable=True)
+    DeclarHorseWt= Column('DeclarHorseWt', Integer, nullable=True)
+    Draw= Column('Draw', Integer, nullable=True)
+    LBW= Column('LBW', Float, nullable=True)
+    RunningPosition= Column('RunningPosition', String, nullable=True)
     Sec1DBL = Column('Sec1DBL', Float, nullable=True)
     Sec2DBL = Column('Sec2DBL', Float, nullable=True)
     Sec3DBL = Column('Sec3DBL', Float, nullable=True)
@@ -180,7 +181,7 @@ class HKRunner(ModelBase):
     Sec4Time = Column('Sec4Time', Time, nullable=True)
     Sec5Time = Column('Sec5Time', Time, nullable=True)
     Sec6Time = Column('Sec6Time', Time, nullable=True)
-    WinOdds= Column('WinOdds', Float, nullable=False)
+    WinOdds= Column('WinOdds', Float, nullable=True)
     HorseReport = Column('HorseReport', String, nullable=True)
     UniqueConstraint('Raceid', 'Horseno', 'Horseid', name='HKRunner_raceidhorsenohorseid_uidx')
 
