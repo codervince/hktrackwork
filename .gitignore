@@ -104,4 +104,7 @@ docs/_build/
 # PyBuilder
 target/
 
+images/
 .jpg
+
+.sublime-workspace
