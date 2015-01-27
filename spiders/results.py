@@ -4,12 +4,14 @@ from scrapy import log
 from scrapy.http import Request
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.loader import ItemLoader
-from scrapy.contrib.loader.processor import TakeFirst, Compose, Join
+from scrapy.contrib.loader.processor import TakeFirst, Compose, Join, MapCompose
+# from scrapy.contrib.loader.processor import MapCompose
 from hkjc.items import ResultsItem, RaceItem
 from datetime import datetime
 from time import sleep
 from fractions import Fraction
 import re
+import pprint
 
 def getHorseReport(ir, h):
     lir = ir.split('.')
@@ -78,9 +80,13 @@ def try_int(value):
     except:
         return 0    
 
+def _cleanurl(value):
+    print value
+    return value
+
 class RaceItemsLoader(ItemLoader):
-    default_item_class = RaceItem
-    default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)        
+    default_item_class = ResultsItem
+    # default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)        
 
 class ResultsItemsLoader(ItemLoader):
     default_item_class = ResultsItem
@@ -102,8 +108,10 @@ class ResultsItemsLoader(ItemLoader):
     Sec4DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec5DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec6DBL_out = Compose(default_output_processor, horselengthprocessor)
+    image_urls_out = MapCompose(_cleanurl) 
     RunningPosition_out = Join(' ')
-    
+   
+   
 
 class ResultsSpider(scrapy.Spider):
     name = "results"
@@ -127,13 +135,30 @@ class ResultsSpider(scrapy.Spider):
                 yield Request(link.url)
             table_data = list()
             #Race ItemsLoader
-            # rl = RaceItemsLoader(response=response)
+            
             # l.add_value("Raceindex", re.search(r"\(([0-9]+)\)", response.xpath('/html/body/div[2]/div[2]/div[2]/div[5]/div[1]/text()').extract()[0]).group(1))
             # l.add_value("Prizemoney", re.sub("\D", "", response.xpath('//td[@class="number14"]/text()').extract()[0]))
             # l.add_xpath("Windiv",'//td[@class= "number14 tdAlignR"]/text()') 
             # j = rl.load_item()
             # table_data.append(j)
-            
+
+
+            #for images and odds data does not make sense to use a separate itemloader??
+            ####Inraceimage + video files
+            for s1 in response.selector.css('img').xpath('@src'):
+
+                rl = RaceItemsLoader(selector=s1)
+                base_url = "http://racing.hkjc.com/racing/content/Images/RaceResult" 
+                # image_url = response.selector.css('img').xpath('@src').re(r'RaceResult(.*)')
+                image_urls = s1.re(r'RaceResult(.*)')
+                # log.msg("image link:  %s " % imagelink[0])
+                image_urls = [base_url + x for x in image_urls]
+
+                if image_urls:
+                    rl.add_value("image_urls", image_urls)
+                    j = rl.load_item()
+                    table_data.append(j)
+
             for tr in response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']"):
                 l = ResultsItemsLoader(selector=tr)
                 l.add_value("Url", response.url)
@@ -145,8 +170,12 @@ class ResultsSpider(scrapy.Spider):
                 l.add_value("RaceIndex", re.search(r"\(([0-9]+)\)", response.xpath('/html/body/div[2]/div[2]/div[2]/div[5]/div[1]/text()').extract()[0]).group(1))
                 l.add_value("Prizemoney", re.sub("\D", "", response.xpath('//td[@class="number14"]/text()').extract()[0]))
                 l.add_value("Going", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[3]/text()').extract()[0])
+                if "ALL WEATHER TRACK" in response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0]:
+                    l.add_value("Railtype", "AWT")
+                    l.add_value("Surface", None)
+                else:    
+                    l.add_value("Railtype", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0].split('-')[1].strip())
                 l.add_value("Surface", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0].split('-')[0].strip())
-                l.add_value("Railtype", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0].split('-')[1].strip())
                 l.add_value("Raceclass", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/text()').extract()[0].split('-')[0].strip())
                 l.add_value("Distance", re.sub("\D", "", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/span/text()').extract()[0].split('-')[0].strip()))
                 if "Class" in response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[1]/text()').extract()[0].split('-')[0].strip():
@@ -175,8 +204,68 @@ class ResultsSpider(scrapy.Spider):
                 l.add_xpath("RunningPosition", "./td[10]//td/text()")
                 l.add_xpath("FinishTime", "./td[11]/text()")
                 l.add_xpath("Winodds", "./td[12]/text()")
+                #get odds data
+                oddspath = response.xpath('//td[@class= "number14 tdAlignR"]/text()')
+                headers = response.xpath('//td[@class= "number14 tdAlignR"]/preceding-sibling::td/text()').extract()
+                l.add_value("WinDiv", oddspath[0].extract().replace(',', ''))
+                l.add_value("Place1Div", oddspath[1].extract().replace(',', ''))
+                l.add_value("Place2Div", oddspath[2].extract().replace(',', ''))
+                l.add_value("Place3Div", oddspath[3].extract().replace(',', ''))
+                l.add_value("QNDiv", oddspath[4].extract().replace(',', ''))
+                l.add_value("QP12Div", oddspath[5].extract().replace(',', ''))
+                l.add_value("QP13Div", oddspath[6].extract().replace(',', ''))
+                l.add_value("QP23Div", oddspath[7].extract().replace(',', ''))
+                l.add_value("TierceDiv", oddspath[8].extract().replace(',', ''))
+                l.add_value("TrioDiv", oddspath[9].extract().replace(',', ''))
+                l.add_value("FirstfourDiv", oddspath[10].extract().replace(',', ''))
+                #optionals
+                '''
+                R1 from JAN 2015 QUARTET owise NONE
+                R2 1ST DOUBLE
+                R3 2ND DOUBLE
+                R4 QUARTET  [11] 3RD DOUBLE [12][13] 1ST DOUBLE TRIO
+                R5 QUARTET  [11] 4TH DOUBLE [12][13]
+                R6 QUARTET 5TH DOUBLE | TRIPLE TRIO | TRIPLE TRIO(Consolation)
+                R7 QUARTET 6TH DOUBLE 2ND DOUBLE TRIO
+                R8 QUARTET 7TH DOUBLE
+                R9 QUARTET 8TH DOUBLE
+                R10 QUARTET 9TH DOUBLE 12 13 TREBLE 14 15 3RD DOUBLE TRIO 16 SIX UP JOCKEY CHALLENGE
+
+                '''
+                r_finddble = r'.*DOUBLE.*'
+                r_findtrble = r'.*TREBLE.*'
+                r_finddbletrio = r'.*DOUBLE TRIO.*'
+                r_findtripletrio = r'.*TRIPLE TRIO.*'
+
+                if "QUARTET" in headers: #1
+                    l.add_value("QuartetDiv", oddspath[11].extract().replace(',', ''))
+                if  len([m.group(0) for m in (re.search(r_finddble, l) for l in headers) if m]) ==1:#2
+                    l.add_value("ThisDouble11Div", oddspath[12].extract().replace(',', ''))
+                    l.add_value("ThisDouble12Div", oddspath[13].extract().replace(',', ''))
+                if len([m.group(0) for m in (re.search(r_finddbletrio, l) for l in headers) if m]) ==1 and len([m.group(0) for m in (re.search(r_findtrble, l) for l in headers) if m]) !=1:
+                    l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
+                    l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
+                if len([m.group(0) for m in (re.search(r_finddbletrio, l) for l in headers) if m]) ==1 and len([m.group(0) for m in (re.search(r_findtrble, l) for l in headers) if m]) ==1: #last race
+                    l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
+                    l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
+                    l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
+                    l.add_value("SixUpDiv", oddspath[17].extract().replace(',', '')) 
+                if len([m.group(0) for m in (re.search(r_findtripletrio, l) for l in headers) if m]) ==1: #r4
+                    l.add_value("TripleTrio111Div", oddspath[14].extract().replace(',', ''))
+                    l.add_value("TripleTrio112Div", oddspath[15].extract().replace(',', ''))      
+                    # Place1div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[1].extract(),
+                    # Place2div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[2].extract(),
+                    # Place3div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[3].extract(),
+                    # QNdiv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[4].extract(),
+                    # QP12div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[5].extract(),
+                    # QP13div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[6].extract(),
+                    # QP23div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[7].extract(),
+                    # Tiercediv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[8].extract(),
+                    # Triodiv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[9].extract(),
+                    # Firstfourdiv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[10].extract()
                 i = l.load_item()
                 table_data.append(i)
+
             for link in LinkExtractor(restrict_xpaths="//img[contains(@src,'sectional_time')]/..").extract_links(response):
                 yield Request(link.url, callback=self.parse_sectional, meta=dict(table_data=table_data))
 

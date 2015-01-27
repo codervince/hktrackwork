@@ -4,6 +4,10 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
+import scrapy
+import pprint
+from scrapy.contrib.pipeline.images import ImagesPipeline
+from scrapy.exceptions import DropItem
 
 from collections import defaultdict
 from datetime import datetime
@@ -14,7 +18,40 @@ from hkjc.models import *
 from hkjc.items import *
 
 def_time = datetime(year=1900, month=1, day=1).time()
-def_DBL = None 
+def_DBL = None
+def_int = None
+
+pp = pprint.PrettyPrinter(indent=4)
+
+# class NoInRaceImagePipeLine(ImagesPipeline):
+
+#     def set_filename(self, response):
+#         #add a regex here to check the title is valid for a filename.
+#         return 'full/{0}.jpg'.format(response.meta['Url'][0])
+
+#     def get_media_requests(self, item, info):
+#         for image_url in item['image_urls']:
+#             # yield scrapy.Request(image_url, meta={'url': item['url']})
+#             yield scrapy.Request(image_url)
+
+#     def get_images(self, response, request, info):
+#         for key, image, buf in super(NoInRaceImagePipeLine, self).get_images(response, request, info):
+#             key = self.set_filename(response)
+#         yield key, image, buf
+
+#     def item_completed(self, results, item, info):
+#         image_paths = [x['path'] for ok,x in results if ok]
+#         if not image_paths:
+#             raise DropItem("no images in this item: sucks")
+#         item['image_paths'] = image_paths
+#         return item    
+
+# class MyImagesPipeline(ImagesPipeline):
+#     pp.pprint('**********************===================*******************')
+#     def get_media_requests(self, item, info):
+#         for image_url in item['image_urls']:
+#             yield scrapy.Request(image_url)
+
 
 class SQLAlchemyPipeline(object):
     def __init__(self):
@@ -53,30 +90,31 @@ class SQLAlchemyPipeline(object):
         if isinstance(item, ResultsItem):
 
 
-            racework = HKRace(
-                Url=item["Url"],
-                RacecourseCode = item["RacecourseCode"],
-                RaceNumber =  item["RaceNumber"],       
-                Prizemoney = item["Prizemoney"],
-                Raceratingspan = item.get("Raceratingspan", None),
-                Surface=item["Surface"],
-                IncidentReport = item["IncidentReport"],
-                RaceIndex = item["RaceIndex"],
-                PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + item["RaceNumber"],
-                Raceclassid= self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
-                Railtypeid = self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
-                Goingid = self.get_id(session, Going, "Name", {"Name": item["Going"]}),
-                Distanceid = self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),"Miles": float(float(item["Distance"])/1600.0),
-                    "Furlongs": int(int(item["Distance"])/200) })
+            # racework = HKRace(
+            #     Url=item["Url"],
+            #     RacecourseCode = item["RacecourseCode"],
+            #     RaceNumber =  item["RaceNumber"],       
+            #     Prizemoney = item["Prizemoney"],
+            #     Raceratingspan = item.get("Raceratingspan", None),
+            #     Surface=item["Surface"],
+            #     IncidentReport = item["IncidentReport"],
+            #     RaceIndex = item["RaceIndex"],
+            #     PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + item["RaceNumber"],
+            #     Raceclassid= self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
+            #     Railtypeid = self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
+            #     Goingid = self.get_id(session, Going, "Name", {"Name": item["Going"]}),
+            #     Distanceid = self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),"Miles": float(float(item["Distance"])/1600.0),
+            #         "Furlongs": int(int(item["Distance"])/200) })
                 
-                )
+            #     )
+
 
 
             trackwork = HKRunner(
                                 # Raceid =self.get_id(session, HKRace, "PublicRaceIndex", {"PublicRaceIndex": item["RacecourseCode"] + item[
                                                                                        # "RaceDate"] + item["RaceNumber"]}),
 
-                                Raceid=self.get_id(session, HKRace, "RaceIndex", {"Url": item["Url"],
+                                Raceid=self.get_id(session, HKRace, "RaceIndex", {"Url": item.get("Url", None),
                                                                                    "RacecourseCode": item["RacecourseCode"],
                                                                                    "RaceDate": item["RaceDate"],
                                                                                    "RaceNumber": item["RaceNumber"],
@@ -85,16 +123,28 @@ class SQLAlchemyPipeline(object):
                                                                                    "Surface": item["Surface"],
                                                                                    "IncidentReport": item["IncidentReport"],
                                                                                    "RaceIndex": item["RaceIndex"],
+                                                                                   # "Winodds": item["Winodds"],
                                                                                    "PublicRaceIndex": item["RacecourseCode"] + item[
                                                                                        "RaceDate"] + item["RaceNumber"],
                                                                                     "Raceclassid": self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
                                                                                     "Railtypeid": self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
                                                                                     "Goingid": self.get_id(session, Going, "Name", {"Name": item["Going"]}),
-                                                                                    "Distanceid": self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),
+                                                                                    "Distanceid": 
+                                                                                        self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),
                                                                                     "Miles": float(float(item["Distance"])/1600.0),
                                                                                     "Furlongs": int(int(item["Distance"])/200)
 
-                                    })   
+                                    }),
+                                       "HKDividendid": self.get_id(session, HKDividend, "RaceDate", {"RaceDate": item["RaceDate"], "RaceNumber": item["RaceNumber"],"RacecourseCode": item["RacecourseCode"],
+                                       "WinDiv": item["WinDiv"], "Place1Div":item["Place1Div"], "Place2Div": item["Place2Div"], "Place3Div":item["Place3Div"],
+                                        "QNDiv": item["QNDiv"], "QP12Div": item["QP12Div"], "QP13Div": item["QP13Div"], "QP23Div": item["QP23Div"],  
+                                        "TierceDiv": item["TierceDiv"], "TrioDiv": item["TrioDiv"], "FirstfourDiv": item["FirstfourDiv"], "QuartetDiv": item["QuartetDiv"],
+                                        "ThisDouble11Div": item.get("ThisDouble11Div", None), "ThisDouble12Div": item.get("ThisDouble12Div",None),"Treble111Div": item.get("Treble111Div", None), 
+                                        "Treble112Div": item.get("Treble112Div",None),
+                                        "ThisDoubleTrioDiv": item.get("ThisDoubleTrioDiv", None), "TripleTrio111Div": item.get("TripleTrio111Div", None),
+                                         "TripleTrio112Div": item.get("TripleTrio112Div", None), "SixUpDiv": item.get("SixUpDiv", None)
+
+                                       })
 
                                                                                        }),
                                  Horseid=self.get_id(session, Horse, "Code",
@@ -109,7 +159,7 @@ class SQLAlchemyPipeline(object):
                                                                                     # "Furlongs": int(int(item["Distance"])/200)
 
                                     # }), 
-                                 HorseNumber=item["HorseNumber"],
+                                 HorseNumber=item.get("HorseNumber", def_int),
                                  Jockeyid=self.get_id(session, Jockey, "Name",
                                                       {"Name": item["Jockey"], "Homecountry": "HKG"}),
                                  Trainerid=self.get_id(session, Trainer, "Name",

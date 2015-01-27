@@ -15,7 +15,10 @@ NEWSPIDER_MODULE = 'hkjc.spiders'
 
 
 ITEM_PIPELINES = {
-    "hkjc.pipelines.SQLAlchemyPipeline": 10
+    "hkjc.pipelines.SQLAlchemyPipeline": 10,
+    'scrapy.contrib.pipeline.images.ImagesPipeline': 1
+    # "hkjc.pipelines.NoInRaceImagePipeLine": 20,
+    # "hkjc.pipelines.MyImagesPipeline":20
 }
 
 """
@@ -44,7 +47,7 @@ DATABASE = {'drivername': 'postgres',
             'port': '5432',
             'username': 'vmac',
             'password': '',
-            'database': 'hkraces2'}
+            'database': 'hkraces4'}
 
 #mysql testing
 #DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
@@ -52,7 +55,7 @@ DATABASE = {'drivername': 'postgres',
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Googlebot/2.1 ( http://www.google.com/bot.html)"
-
+IMAGES_STORE = '/Users/vmac/RACING/HKG/scrapers/dist/hkjc/images'
 #npt filter dups default 'scrapy.dupefilter.RFPDupeFilter'
 # DUPEFILTER_CLASS = 'scrapy.dupefilter.BaseDupeFilter' 
 
