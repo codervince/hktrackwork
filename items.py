@@ -68,6 +68,7 @@ class ResultsItem(scrapy.Item):
     IncidentReport = scrapy.Field()
     image_urls = scrapy.Field()
     images = scrapy.Field()
+    Inracename = scrapy.Field()
     WinDiv = scrapy.Field()
     Place1Div = scrapy.Field()
     Place2Div = scrapy.Field()
@@ -88,6 +89,7 @@ class ResultsItem(scrapy.Item):
     TripleTrio111Div = scrapy.Field()
     TripleTrio112Div = scrapy.Field()
     SixUpDiv = scrapy.Field()
+    SixUpBonusDiv = scrapy.Field()
     #public race index is an artifical field 
 
 

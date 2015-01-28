@@ -155,6 +155,7 @@ class HKDividend(ModelBase):
     TripleTrio111Div = Column(Float)
     TripleTrio112Div = Column(Float)
     SixUpDiv = Column(Float)
+    SixUpBonusDiv = Column(Float)
     UniqueConstraint('RacecourseCode', 'RaceDate','RaceNumber', name='HKDividendRCCodeDateRaceNumber_uidx') 
 
 class HKRunner(ModelBase):

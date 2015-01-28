@@ -12,6 +12,9 @@ from time import sleep
 from fractions import Fraction
 import re
 import pprint
+import logging
+from scrapy.log import ScrapyFileLogObserver
+
 
 def getHorseReport(ir, h):
     lir = ir.split('.')
@@ -80,13 +83,14 @@ def try_int(value):
     except:
         return 0    
 
-def _cleanurl(value):
-    print value
-    return value
+
+# def _cleanurl(value):
+#     return value
 
 class RaceItemsLoader(ItemLoader):
     default_item_class = ResultsItem
     # default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)        
+    # image_urls_out = MapCompose(TakeFirst())
 
 class ResultsItemsLoader(ItemLoader):
     default_item_class = ResultsItem
@@ -108,10 +112,10 @@ class ResultsItemsLoader(ItemLoader):
     Sec4DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec5DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec6DBL_out = Compose(default_output_processor, horselengthprocessor)
-    image_urls_out = MapCompose(_cleanurl) 
+    # image_urls_out = MapCompose(_cleanurl) 
     RunningPosition_out = Join(' ')
    
-   
+
 
 class ResultsSpider(scrapy.Spider):
     name = "results"
@@ -123,15 +127,17 @@ class ResultsSpider(scrapy.Spider):
             raise ValueError("Invalid spider parameters")
         self.racedate = date
         self.racecode = coursecode
-
+        logfile = open('testlog.log', 'w')
+        log_observer = ScrapyFileLogObserver(logfile, level=logging.DEBUG)
+        log_observer.start()
 
     def parse(self, response):
         if not len(response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']")):
             log.msg("Results page not ready, waiting 2 secs...", logLevel=log.INFO)
             sleep(2)
-            yield Request(response.url, dont_filter=True)
+            yield Request(response.url)
         else:
-            for link in LinkExtractor(restrict_xpaths="//div[contains(@class,'raceNum')]").extract_links(response)[:-1]:
+            for link in LinkExtractor(restrict_xpaths="//div[contains(@class,'raceNum')]", deny=(r'.*/Simulcast/.*')).extract_links(response)[:-1]:
                 yield Request(link.url)
             table_data = list()
             #Race ItemsLoader
@@ -152,18 +158,25 @@ class ResultsSpider(scrapy.Spider):
                 # image_url = response.selector.css('img').xpath('@src').re(r'RaceResult(.*)')
                 image_urls = s1.re(r'RaceResult(.*)')
                 # log.msg("image link:  %s " % imagelink[0])
-                image_urls = [base_url + x for x in image_urls]
+                #http://www.hkjc.com/english/racing/finishphoto.asp?racedate=20141220R1_L.jpg
+                # [u'/20150118R2_S.jpg']
+                image_urls = [base_url + x.replace("S", "L") for x in image_urls]
 
                 if image_urls:
                     rl.add_value("image_urls", image_urls)
                     j = rl.load_item()
                     table_data.append(j)
+                # else:
+                #     rl.add_value("image_urls", None)      
 
             for tr in response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']"):
                 l = ResultsItemsLoader(selector=tr)
                 l.add_value("Url", response.url)
                 dd = response.url.split("/")
                 l.add_value("RaceDate", dd[-3])
+                theracedate = dd[-3]
+                theracenumber = dd[-1]
+                l.add_value("Inracename", theracedate+"R"+theracenumber)
                 l.add_value("RacecourseCode", dd[-2])
                 l.add_value("RaceNumber", dd[-1])
                 #racedata table: response.xpath('//table[contains(@class, \"tableBorder0 font13\")]').extract()
@@ -219,50 +232,64 @@ class ResultsSpider(scrapy.Spider):
                 l.add_value("TrioDiv", oddspath[9].extract().replace(',', ''))
                 l.add_value("FirstfourDiv", oddspath[10].extract().replace(',', ''))
                 #optionals
-                '''
-                R1 from JAN 2015 QUARTET owise NONE
-                R2 1ST DOUBLE
-                R3 2ND DOUBLE
-                R4 QUARTET  [11] 3RD DOUBLE [12][13] 1ST DOUBLE TRIO
-                R5 QUARTET  [11] 4TH DOUBLE [12][13]
-                R6 QUARTET 5TH DOUBLE | TRIPLE TRIO | TRIPLE TRIO(Consolation)
-                R7 QUARTET 6TH DOUBLE 2ND DOUBLE TRIO
-                R8 QUARTET 7TH DOUBLE
-                R9 QUARTET 8TH DOUBLE
-                R10 QUARTET 9TH DOUBLE 12 13 TREBLE 14 15 3RD DOUBLE TRIO 16 SIX UP JOCKEY CHALLENGE
 
-                '''
+                newformatdate = datetime.strptime('20150115', '%Y%M%d')
+                theracedate = datetime.strptime(theracedate, '%Y%M%d')
+
                 r_finddble = r'.*DOUBLE.*'
                 r_findtrble = r'.*TREBLE.*'
                 r_finddbletrio = r'.*DOUBLE TRIO.*'
                 r_findtripletrio = r'.*TRIPLE TRIO.*'
+                r_findquartet = r'.*QUARTET.*'
+                r_findsixup = r'.*SIX UP.*'
 
-                if "QUARTET" in headers: #1
+                hasdble = len([m.group(0) for m in (re.search(r_finddble, l) for l in headers) if m]) == 1
+                hasdbletrio = len([m.group(0) for m in (re.search(r_finddbletrio, l) for l in headers) if m]) ==1
+                hastrble = len([m.group(0) for m in (re.search(r_findtrble, l) for l in headers) if m]) ==1
+                hastripletrio = len([m.group(0) for m in (re.search(r_findtripletrio, l) for l in headers) if m]) ==1
+                hasquartet = len([m.group(0) for m in (re.search(r_findquartet, l) for l in headers) if m]) == 1
+                hassixup = len([m.group(0) for m in (re.search(r_findsixup, l) for l in headers) if m]) == 1
+
+                if theracedate > newformatdate:
+                    #quartets every race
                     l.add_value("QuartetDiv", oddspath[11].extract().replace(',', ''))
-                if  len([m.group(0) for m in (re.search(r_finddble, l) for l in headers) if m]) ==1:#2
-                    l.add_value("ThisDouble11Div", oddspath[12].extract().replace(',', ''))
-                    l.add_value("ThisDouble12Div", oddspath[13].extract().replace(',', ''))
-                if len([m.group(0) for m in (re.search(r_finddbletrio, l) for l in headers) if m]) ==1 and len([m.group(0) for m in (re.search(r_findtrble, l) for l in headers) if m]) !=1:
-                    l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
-                    l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
-                if len([m.group(0) for m in (re.search(r_finddbletrio, l) for l in headers) if m]) ==1 and len([m.group(0) for m in (re.search(r_findtrble, l) for l in headers) if m]) ==1: #last race
-                    l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
-                    l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
-                    l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
-                    l.add_value("SixUpDiv", oddspath[17].extract().replace(',', '')) 
-                if len([m.group(0) for m in (re.search(r_findtripletrio, l) for l in headers) if m]) ==1: #r4
-                    l.add_value("TripleTrio111Div", oddspath[14].extract().replace(',', ''))
-                    l.add_value("TripleTrio112Div", oddspath[15].extract().replace(',', ''))      
-                    # Place1div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[1].extract(),
-                    # Place2div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[2].extract(),
-                    # Place3div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[3].extract(),
-                    # QNdiv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[4].extract(),
-                    # QP12div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[5].extract(),
-                    # QP13div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[6].extract(),
-                    # QP23div = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[7].extract(),
-                    # Tiercediv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[8].extract(),
-                    # Triodiv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[9].extract(),
-                    # Firstfourdiv = response.xpath('//td[@class= "number14 tdAlignR"]/text()')[10].extract()
+                    #all but race one has double
+                    if hasdble:
+                        #excludes race 1
+                        l.add_value("ThisDouble11Div", oddspath[12].extract().replace(',', ''))
+                        l.add_value("ThisDouble12Div", oddspath[13].extract().replace(',', ''))
+                    if hasdbletrio and not hastrble and not hassixup:   
+                        l.add_value("ThisDoubleTrioDiv", oddspath[14].extract().replace(',', ''))
+                    if hastripletrio:
+                        l.add_value("TripleTrio111Div", oddspath[14].extract().replace(',', ''))
+                        l.add_value("TripleTrio112Div", oddspath[15].extract().replace(',', ''))
+                    if hassixup:
+                        #last race
+                        l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
+                        l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
+                        l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
+                        l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
+                        l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
+
+                else:
+                    #quartets limited to races X and Y
+                    if hasdble:
+                        l.add_value("ThisDouble11Div", oddspath[11].extract().replace(',', ''))
+                        l.add_value("ThisDouble12Div", oddspath[12].extract().replace(',', ''))    
+                    if hasdbletrio and not hastrble and not hassixup:
+                        l.add_value("ThisDoubleTrioDiv", oddspath[13].extract().replace(',', ''))
+                    if hastripletrio:
+                        l.add_value("TripleTrio111Div", oddspath[13].extract().replace(',', ''))
+                        l.add_value("TripleTrio112Div", oddspath[14].extract().replace(',', ''))
+                    if hassixup:
+                        l.add_value("QuartetDiv", oddspath[11].extract().replace(',', ''))
+                        l.add_value("ThisDouble11Div", oddspath[12].extract().replace(',', ''))
+                        l.add_value("ThisDouble12Div", oddspath[13].extract().replace(',', ''))
+                        l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
+                        l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
+                        l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
+                        l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
+                        l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
                 i = l.load_item()
                 table_data.append(i)
 

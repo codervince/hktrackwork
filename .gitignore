@@ -2,7 +2,15 @@
 ### JetBrains template
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm
 
+*.jpg
+*.csv
+*.sublime-workspace
 *.iml
+
+###my ignore
+
+images/full/**
+full/**
 
 ## Directory-based project format:
 .idea/
@@ -104,7 +112,5 @@ docs/_build/
 # PyBuilder
 target/
 
-images/
-.jpg
 
-TRACKRESULTS.sublime-workspace
+
