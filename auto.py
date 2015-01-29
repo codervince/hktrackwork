@@ -20,8 +20,8 @@ with open('HKraces.csv', mode='r') as infile:
 
 #read from dictionary fill command line and run scrapy
 
-thedate = '20141220'
-thecoursecode = 'ST'
+thedate = '20150128'
+thecoursecode = 'HV'
 
 # "scrapy crawl results -a date=20150120 -a coursecode='ST'"
 os.system("scrapy crawl results -a date=" + thedate +" -a coursecode=" + thecoursecode + "")

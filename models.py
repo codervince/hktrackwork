@@ -3,6 +3,7 @@ __author__ = 'Vince'
 
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, UniqueConstraint, CheckConstraint, Time, Float
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.engine.url import URL
 
 import settings
@@ -188,6 +189,7 @@ class HKRunner(ModelBase):
     Sec6Time = Column('Sec6Time', Time, nullable=True)
     WinOdds= Column('WinOdds', Float, nullable=True)
     HorseReport = Column('HorseReport', String, nullable=True)
+    HorseColors = Column('HorseColors', BYTEA, nullable=True)
     UniqueConstraint('Raceid', 'Horseno', 'Horseid', name='HKRunner_raceidhorsenohorseid_uidx')
 
 #OTHER TABLES

@@ -47,6 +47,7 @@ class MyImagesPipeline(ImagesPipeline):
 
     def file_path(self, request, response=None, info=None):
         #item=request.meta['item'] # Like this you can use all from item, not just url.
+        #http://www.hkjc.com/english/racing/finishphoto.asp?racedate=20141220R1_L.jpg
         image_id = request.url.split('/')[-1]
         # image_id = request.meta.get('Inracename')
         #get name

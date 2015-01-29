@@ -269,8 +269,11 @@ class ResultsSpider(scrapy.Spider):
                         l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
                         l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
                         l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
-                        l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
 
+                        try: 
+                            l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
+                        except:
+                            pass    
                 else:
                     #quartets limited to races X and Y
                     if hasdble:
