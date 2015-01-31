@@ -82,15 +82,16 @@ def try_int(value):
         return int(value)
     except:
         return 0    
-
+def identity(value):
+    return value
 
 # def _cleanurl(value):
 #     return value
 
-class RaceItemsLoader(ItemLoader):
-    default_item_class = ResultsItem
+# class RaceItemsLoader(ItemLoader):
+#     default_item_class = ResultsItem
     # default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)        
-    # image_urls_out = MapCompose(TakeFirst())
+    
 
 class ResultsItemsLoader(ItemLoader):
     default_item_class = ResultsItem
@@ -114,6 +115,7 @@ class ResultsItemsLoader(ItemLoader):
     Sec6DBL_out = Compose(default_output_processor, horselengthprocessor)
     # image_urls_out = MapCompose(_cleanurl) 
     RunningPosition_out = Join(' ')
+    image_urls_out = Compose(identity)
    
 
 
@@ -151,27 +153,36 @@ class ResultsSpider(scrapy.Spider):
 
             #for images and odds data does not make sense to use a separate itemloader??
             ####Inraceimage + video files
-            for s1 in response.selector.css('img').xpath('@src'):
+            
 
-                rl = RaceItemsLoader(selector=s1)
-                base_url = "http://racing.hkjc.com/racing/content/Images/RaceResult" 
+                # rl = RaceItemsLoader(selector=s1)
+                # base_url = "http://racing.hkjc.com/racing/content/Images/RaceResult" 
                 # image_url = response.selector.css('img').xpath('@src').re(r'RaceResult(.*)')
-                image_urls = s1.re(r'RaceResult(.*)')
+                # image_urls = s1.re(r'RaceResult(.*)')
                 # log.msg("image link:  %s " % imagelink[0])
                 #http://www.hkjc.com/english/racing/finishphoto.asp?racedate=20141220R1_L.jpg
                 # [u'/20150118R2_S.jpg']
-                image_urls = [base_url + x.replace("S", "L") for x in image_urls]
+                # image_urls = [base_url + x.replace("S", "L") for x in image_urls]
 
-                if image_urls:
-                    rl.add_value("image_urls", image_urls)
-                    j = rl.load_item()
-                    table_data.append(j)
+                # if image_urls:
+                #     l.add_value("image_urls", image_urls)
+                #     j = rl.load_item()
+                    
                 # else:
                 #     rl.add_value("image_urls", None)      
 
             for tr in response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']"):
                 l = ResultsItemsLoader(selector=tr)
                 l.add_value("Url", response.url)
+                base_url = "http://racing.hkjc.com/racing/content/Images/RaceResult"
+                image_urls = [base_url + s1.replace("S", "L") for s1 in response.selector.css('img').xpath('@src').re(r'RaceResult(.*)')]
+                l.add_value("image_urls", image_urls)
+                # for s1 in response.selector.css('img').xpath('@src').re(r'RaceResult(.*)'):   
+
+                    # pprint.pprint([base_url+s1])
+
+                    # image_urls = [base_url + x.replace("S", "L") for x in image_urls]
+                    # l.add_value("image_urls", image_urls)
                 dd = response.url.split("/")
                 l.add_value("RaceDate", dd[-3])
                 theracedate = dd[-3]
@@ -274,6 +285,7 @@ class ResultsSpider(scrapy.Spider):
                             l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
                         except:
                             pass    
+
                 else:
                     #quartets limited to races X and Y
                     if hasdble:
@@ -295,6 +307,7 @@ class ResultsSpider(scrapy.Spider):
                         l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
                 i = l.load_item()
                 table_data.append(i)
+
 
             for link in LinkExtractor(restrict_xpaths="//img[contains(@src,'sectional_time')]/..").extract_links(response):
                 yield Request(link.url, callback=self.parse_sectional, meta=dict(table_data=table_data))

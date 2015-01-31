@@ -40,11 +40,9 @@ pp = pprint.PrettyPrinter(indent=4)
 #         yield key, image, buf
 
    
-
+#inraceimage one per race
 class MyImagesPipeline(ImagesPipeline):
    
- 
-
     def file_path(self, request, response=None, info=None):
         #item=request.meta['item'] # Like this you can use all from item, not just url.
         #http://www.hkjc.com/english/racing/finishphoto.asp?racedate=20141220R1_L.jpg
@@ -70,12 +68,12 @@ class MyImagesPipeline(ImagesPipeline):
         except:
             None        
 
-    # def item_completed(self, results, item, info):
-    #     image_urls = [x['url'] for ok,x in results if ok]
-    #     if not image_urls:
-    #         raise DropItem("no images in this item: sucks")
-    #     item['image_urls'] = image_urls
-    #     return item 
+    def item_completed(self, results, item, info):
+        image_urls = [x['url'] for ok,x in results if ok]
+        if not image_urls:
+            raise DropItem("no images in this item: sucks")
+        item['image_urls'] = image_urls
+        return item 
 
 class SQLAlchemyPipeline(object):
     def __init__(self):

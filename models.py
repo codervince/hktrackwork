@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Vince'
 
-from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, UniqueConstraint, CheckConstraint, Time, Float
+from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, UniqueConstraint, CheckConstraint, Time, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.engine.url import URL
@@ -54,7 +54,7 @@ class Distance(ModelBase):
     MetricName = Column(Integer)
     Miles = Column(Float)
     Furlongs = Column(Integer) 
-    UniqueConstraint('Name', name='HKDistance_Name_uidx')
+    UniqueConstraint('MetricName', name='HKDistance_MetricName_uidx')
 
 class Railtype(ModelBase):
     __tablename__= "hk_railtype"
@@ -68,6 +68,7 @@ class Horse(ModelBase):
     id = Column(Integer, primary_key=True)
     Code = Column(String(6), nullable=False, unique=True)
     Name = Column(String(255), nullable=False)
+    Sex = Column(String(2), nullable=True)
     Homecountry = Column('Homecountry', String(3), nullable=False)
     ImportType = Column(String(10), default="")
     SireName = Column(String(255), default="")
@@ -111,9 +112,10 @@ class HKRace(ModelBase):
     __tableargs__ = ( 
         CheckConstraint('RacecourseCode in ("HV", "ST")'), UniqueConstraint('PublicRaceIndex'), {'autoload': True})
     id = Column(Integer, primary_key=True)
-    Url = Column('url', String)
+    Url = Column('Url', String)
     RacecourseCode = Column('RacecourseCode', String, nullable=False)
-    RaceDate = Column('RaceDate', String, nullable=False)
+    Name = Column('Name', String(255), nullable=True)
+    RaceDate = Column('RaceDate', String, nullable=True)
     RaceDateTime = Column('RaceDateTime', Date, nullable=True)
     RaceNumber = Column('RaceNumber', String, nullable=False)
     PublicRaceIndex = Column('PublicRaceIndex', String, nullable=False)
@@ -127,6 +129,7 @@ class HKRace(ModelBase):
     Raceratingspan = Column(String)
     Prizemoney = Column(Integer)
     Surface = Column('Surface', String)
+    Inraceimage = Column('Inraceimage', BYTEA, nullable=True)
     UniqueConstraint('PublicRaceIndex', name='HKRace_PublicRaceIndex_uidx') 
 
 class HKDividend(ModelBase):
@@ -164,23 +167,35 @@ class HKRunner(ModelBase):
     id = Column(Integer, primary_key=True)
     Raceid = Column(Integer, ForeignKey("hk_race.id"))
     Horseid = Column(Integer, ForeignKey("horse.id"))
+    Gearid = Column(Integer, ForeignKey("hk_gear.id"))
+    Ownerid = Column(Integer, ForeignKey("owner.id"))
     HorseNumber= Column('HorseNumber', String, nullable=True)
     Jockeyid =Column(Integer, ForeignKey("jockey.id"))
     Trainerid =Column(Integer, ForeignKey("trainer.id"))
     Jockey= Column('Jockey', String, nullable=True)
+    JockeyWtOver = Column('JockeyWtOver', Integer, nullable=True)
     Trainer= Column('Trainer', String, nullable=True)
     ActualWt= Column('ActualWt', Integer, nullable=True)
     DeclarHorseWt= Column('DeclarHorseWt', Integer, nullable=True)
+    HorseWtDeclarChange = Column('HorseWtDeclarChange', Integer, nullable=True)
+    HorseWtpc = Column('HorseWtpc', Float, nullable=True)
     Draw= Column('Draw', Integer, nullable=True)
     LBW= Column('LBW', Float, nullable=True)
+    Last6runs = Column('Last6runs', String(30), nullable=True)
+    Priority = Column('Priority', String(10), nullable=True)
     RunningPosition= Column('RunningPosition', String, nullable=True)
+    Rating =Column('Rating', Integer, nullable=True)
+    RatingChangeL1 = Column('RatingChangeL1', Integer, nullable=True)
+    SeasonStakes = Column('SeasonStakes', Integer, nullable=True)
+    WFA = Column('WFA', Integer, nullable=True)
+    isRanOn = Column('isRanOn', Boolean, nullable=True)
     Sec1DBL = Column('Sec1DBL', Float, nullable=True)
     Sec2DBL = Column('Sec2DBL', Float, nullable=True)
     Sec3DBL = Column('Sec3DBL', Float, nullable=True)
     Sec4DBL = Column('Sec4DBL', Float, nullable=True)
     Sec5DBL = Column('Sec5DBL', Float, nullable=True)
     Sec6DBL = Column('Sec6DBL', Float, nullable=True)
-    FinishTime= Column('FinishTime', Time, nullable=False)  #e.g. 1.49.08 --> '00:01:49.08' hhmmss.nn always < 5mins
+    FinishTime= Column('FinishTime', Time, nullable=True)  #e.g. 1.49.08 --> '00:01:49.08' hhmmss.nn always < 5mins
     Sec1Time = Column('Sec1Time', Time, nullable=True)
     Sec2Time = Column('Sec2Time', Time, nullable=True)
     Sec3Time = Column('Sec3Time', Time, nullable=True)

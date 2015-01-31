@@ -19,9 +19,9 @@ with open('HKraces.csv', mode='r') as infile:
 	# os.system("scrapy crawl results -a date=" + thedate +" -a coursecode=" + thecoursecode + "")
 
 #read from dictionary fill command line and run scrapy
-
-thedate = '20150128'
-thecoursecode = 'HV'
+# 20140608,ST
+thedate = '20140608'
+thecoursecode = 'ST'
 
 # "scrapy crawl results -a date=20150120 -a coursecode='ST'"
 os.system("scrapy crawl results -a date=" + thedate +" -a coursecode=" + thecoursecode + "")

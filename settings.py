@@ -40,14 +40,14 @@ ITEM_PIPELINES = {
 
     :param query: A dictionary of options to be passed to the
       dialect and/or the DBAPI upon connect.
-
+s
 """
 DATABASE = {'drivername': 'postgres',
             'host': 'localhost',
             'port': '5432',
             'username': 'vmac',
             'password': '',
-            'database': 'hkraces5'}
+            'database': 'hkraces21'}
 
 #mysql testing
 #DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
