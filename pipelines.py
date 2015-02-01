@@ -14,6 +14,10 @@ from datetime import datetime
 
 from sqlalchemy.orm import sessionmaker, exc
 
+from scrapy.contrib.pipeline.files import FileException
+from scrapy import log
+import hashlib
+
 from hkjc.models import *
 from hkjc.items import *
 
@@ -240,3 +244,42 @@ class SQLAlchemyPipeline(object):
         # else:
         # log.msg("[%s] %s cache hit for '%s'" % (self.__class__.__name__, model, fval), logLevel=log.DEBUG)
         return id
+
+class ByteStorePipeline(ImagesPipeline):
+  def media_downloaded(self, response, request, info):
+        referer = request.headers.get('Referer')
+
+        if response.status != 200:
+            log.msg(format='File (code: %(status)s): Error downloading file from %(request)s referred in <%(referer)s>',
+                    level=log.WARNING, spider=info.spider,
+                    status=response.status, request=request, referer=referer)
+            raise FileException('download-error')
+
+        if not response.body:
+            log.msg(format='File (empty-content): Empty file from %(request)s referred in <%(referer)s>: no-content',
+                    level=log.WARNING, spider=info.spider,
+                    request=request, referer=referer)
+            raise FileException('empty-content')
+
+        status = 'cached' if 'cached' in response.flags else 'downloaded'
+        log.msg(format='File (%(status)s): Downloaded file from %(request)s referred in <%(referer)s>',
+                level=log.DEBUG, spider=info.spider,
+                status=status, request=request, referer=referer)
+        self.inc_stats(info.spider, status)
+
+        try:
+            bytestr = response.body
+            m = hashlib.md5()
+            m.update(bytestr)
+            checksum = m.hexdigest()
+        except FileException as exc:
+            whyfmt = 'File (error): Error processing file from %(request)s referred in <%(referer)s>: %(errormsg)s'
+            log.msg(format=whyfmt, level=log.WARNING, spider=info.spider,
+                    request=request, referer=referer, errormsg=str(exc))
+            raise
+        except Exception as exc:
+            whyfmt = 'File (unknown-error): Error processing file from %(request)s referred in <%(referer)s>'
+            log.err(None, whyfmt % {'request': request, 'referer': referer}, spider=info.spider)
+            raise FileException(str(exc))
+
+        return {'url': request.url, 'data': bytestr, 'checksum': checksum}
