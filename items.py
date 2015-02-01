@@ -29,6 +29,7 @@ class ResultsItem(scrapy.Item):
     RacecourseCode = scrapy.Field()
     RaceDate = scrapy.Field()
     RaceNumber = scrapy.Field()
+    Name = scrapy.Field()
     Place = scrapy.Field()
     HorseNumber = scrapy.Field()
     Horse = scrapy.Field()

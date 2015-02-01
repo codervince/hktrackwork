@@ -22,7 +22,6 @@ def_DBL = None
 def_int = None
 
 pp = pprint.PrettyPrinter(indent=4)
-
 # class NoInRaceImagePipeLine(ImagesPipeline):
 
 #     def set_filename(self, response):
@@ -139,6 +138,7 @@ class SQLAlchemyPipeline(object):
                                 Raceid=self.get_id(session, HKRace, "PublicRaceIndex", {"Url": item.get("Url", None),
                                                                                    "RacecourseCode": item["RacecourseCode"],
                                                                                    "RaceDate": item["RaceDate"],
+                                                                                   "Name": item["Name"],
                                                                                    "RaceNumber": item["RaceNumber"],
                                                                                    "Prizemoney": item.get("Prizemoney", None),
                                                                                    "Raceratingspan": item.get("Raceratingspan", None),

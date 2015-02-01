@@ -3,7 +3,7 @@ __author__ = 'Vince'
 
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, UniqueConstraint, CheckConstraint, Time, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.dialects.postgresql import BYTEA
+from sqlalchemy.dialects.postgresql import BYTEA, TIMESTAMP
 from sqlalchemy.engine.url import URL
 
 import settings
@@ -115,8 +115,8 @@ class HKRace(ModelBase):
     Url = Column('Url', String)
     RacecourseCode = Column('RacecourseCode', String, nullable=False)
     Name = Column('Name', String(255), nullable=True)
-    RaceDate = Column('RaceDate', String, nullable=True)
-    RaceDateTime = Column('RaceDateTime', Date, nullable=True)
+    RaceDate = Column('RaceDate', Date, nullable=True)
+    RaceDateTime = Column('RaceDateTime', String, nullable=True)
     RaceNumber = Column('RaceNumber', String, nullable=False)
     PublicRaceIndex = Column('PublicRaceIndex', String, nullable=False)
     RaceIndex = Column('RaceIndex', String, nullable=True)

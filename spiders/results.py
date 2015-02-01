@@ -91,7 +91,8 @@ def identity(value):
 # class RaceItemsLoader(ItemLoader):
 #     default_item_class = ResultsItem
     # default_output_processor = Compose(TakeFirst(), unicode, unicode.strip)        
-    
+
+#GIT VERSION
 
 class ResultsItemsLoader(ItemLoader):
     default_item_class = ResultsItem
@@ -194,6 +195,7 @@ class ResultsSpider(scrapy.Spider):
                 l.add_value("RaceIndex", re.search(r"\(([0-9]+)\)", response.xpath('/html/body/div[2]/div[2]/div[2]/div[5]/div[1]/text()').extract()[0]).group(1))
                 l.add_value("Prizemoney", re.sub("\D", "", response.xpath('//td[@class="number14"]/text()').extract()[0]))
                 l.add_value("Going", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[1]/td[3]/text()').extract()[0])
+                l.add_value("Name", response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[1]/text()').extract()[0])
                 if "ALL WEATHER TRACK" in response.xpath('//table[contains(@class, \"tableBorder0 font13\")]/tr[2]/td[3]/text()').extract()[0]:
                     l.add_value("Railtype", "AWT")
                     l.add_value("Surface", None)
