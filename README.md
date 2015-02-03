@@ -5,16 +5,16 @@
 * sectionals data
 * dividend data
 * in race image -> filesystem
+* in race image UN SHA'd
+* run from CSV list
 
 ##WHATS TO DO
-* in race image UN SHA'd
-* in race image -> DB
+
+* in race image -> DB 
 * video playlist- > filesystem
 * video playlist -> .ts -> DB
-
-CRON SCHEDULE SPIDER CRAWL
-* ALL meets to CSV date coursecode 
-* updateresults(startdate=MINDATE, enddate=TODAY())
+* update HORSES to include vet info h code
+* get today's list of runners run against HORSES
 
 
 
