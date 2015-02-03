@@ -5,8 +5,17 @@ from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey,
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import BYTEA, TIMESTAMP
 from sqlalchemy.engine.url import URL
-
+from sqlalchemy.orm import relationship, backref
+#for Oracle, Firebird
+from sqlalchemy import Sequence
 import settings
+
+
+#for multithreading
+# from twisted.web import xmlrpc, server
+# from twisted.internet import reactor
+from twisted.internet.defer import Deferred
+from sa_decorators import DBDefer
 
 
 ModelBase = declarative_base()
@@ -17,7 +26,7 @@ ModelBase = declarative_base()
 
 class EventType(ModelBase):
     __tablename__ = "hk_trackwork_type"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Sequence('id_seq'), primary_key=True)
     Name = Column(String(100), unique=True)
     UniqueConstraint('Name', name='EventTypeName_uidx')
 
@@ -25,7 +34,7 @@ class EventType(ModelBase):
 class Owner(ModelBase):
     __tablename__ = "owner"
     __tableargs__ = ( CheckConstraint('Homecountry in ("HKG", "SIN", "AUS", "NZL", "RSA". "ENG", "IRE", "DUB", "IRE", "SCO", "MAC")'))
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, Sequence('id_seq'), primary_key=True)
     Name = Column(String(255), unique=True)
     Homecountry = Column('Homecountry', String(3), nullable=False)
     UniqueConstraint('Name', name='OwnerName_uidx')
@@ -117,7 +126,7 @@ class HKRace(ModelBase):
     Name = Column('Name', String(255), nullable=True)
     RaceDate = Column('RaceDate', Date, nullable=True)
     RaceDateTime = Column('RaceDateTime', String, nullable=True)
-    RaceNumber = Column('RaceNumber', String, nullable=False)
+    RaceNumber = Column('RaceNumber', Integer, nullable=False)
     PublicRaceIndex = Column('PublicRaceIndex', String, nullable=False)
     RaceIndex = Column('RaceIndex', String, nullable=True)
     IncidentReport = Column('IncidentReport', String, nullable=True)
@@ -130,7 +139,13 @@ class HKRace(ModelBase):
     Prizemoney = Column(Integer)
     Surface = Column('Surface', String)
     Inraceimage = Column('Inraceimage', BYTEA, nullable=True)
-    UniqueConstraint('PublicRaceIndex', name='HKRace_PublicRaceIndex_uidx') 
+    UniqueConstraint('PublicRaceIndex', name='HKRace_PublicRaceIndex_uidx')
+
+
+
+    def __repr__(self):
+        return "HKRace(RacecourseCode='%s', Name= '%s', RaceDate='%s', RaceNumber='%d', RaceIndex='%s',Prizemoney='%s')" % \
+        (self.RacecourseCode, self.Name, self.RaceDate, self.RaceNumber, self.RaceIndex, self.RaceIndex, self.Prizemoney)  
 
 class HKDividend(ModelBase):
     __tablename__ = "hk_dividend"
@@ -138,6 +153,7 @@ class HKDividend(ModelBase):
     RacecourseCode = Column('RacecourseCode', String, nullable=False)
     RaceDate = Column('RaceDate', String, nullable=False)
     RaceNumber = Column('RaceNumber', String, nullable=False)
+    PublicRaceIndex = Column('PublicRaceIndex', String, nullable=False)
     WinDiv= Column(Float, nullable=False)
     Place1Div = Column(Float, nullable=True)
     Place2Div = Column(Float, nullable=True)
@@ -167,6 +183,8 @@ class HKRunner(ModelBase):
     id = Column(Integer, primary_key=True)
     Raceid = Column(Integer, ForeignKey("hk_race.id"))
     Horseid = Column(Integer, ForeignKey("horse.id"))
+    Place = Column(Integer, ForeignKey("horse.id"))
+    isVetScratched = Column('isVetScratched', Boolean)
     Gearid = Column(Integer, ForeignKey("hk_gear.id"))
     Ownerid = Column(Integer, ForeignKey("owner.id"))
     HorseNumber= Column('HorseNumber', String, nullable=True)
@@ -221,9 +239,13 @@ class HKOdds(ModelBase):
     # Horseid = Column(Integer, ForeignKey("horse.id"))
     UniqueConstraint('Raceid', 'HorseNumber', 'UpdateDate', 'UpdateTime', name='HKOdds_RaceidHorseNoUpdateDateTime_uidx')
 
+    # 1:M race:HKodds
+    race = relationship("HKRace", backref=backref("odds", order_by=(Updatedate, Updatetime)))
+
+
 def get_engine():
     return create_engine(URL(**settings.DATABASE))
-
+    # return DBDefer(URL(**settings.DATABASE))
 
 def create_schema(engine):
     ModelBase.metadata.create_all(engine)

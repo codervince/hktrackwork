@@ -21,6 +21,12 @@ import hashlib
 from hkjc.models import *
 from hkjc.items import *
 
+
+from sa_decorators import DBDefer
+
+dbdefer = DBDefer(URL(**settings.DATABASE))
+# metadata = MetaData(dbdefer.engine)
+
 def_time = datetime(year=1900, month=1, day=1).time()
 def_DBL = None
 def_int = None
@@ -42,8 +48,15 @@ pp = pprint.PrettyPrinter(indent=4)
 #             key = self.set_filename(response)
 #         yield key, image, buf
 
+def getLBW(lbw, place, LBWFirst):
+    if place == 1:
+        return LBWFirst
+    else:
+        return lbw
+                            
    
 #inraceimage one per race
+# @dbdefer
 class MyImagesPipeline(ImagesPipeline):
    
     def file_path(self, request, response=None, info=None):
@@ -78,15 +91,17 @@ class MyImagesPipeline(ImagesPipeline):
         item['image_urls'] = image_urls
         return item 
 
+
 class SQLAlchemyPipeline(object):
     def __init__(self):
         engine = get_engine()
         create_schema(engine)
+
         self.Session = sessionmaker(bind=engine)
         self.cache = defaultdict(lambda: defaultdict(lambda: None))
-
+        # metadata = sa.MetaData(dbdefer.engine) 
         # TODO: get horsecolors!
-
+    # @dbdefer    
     def process_item(self, item, spider):
         if not isinstance(item, (HorseItem, ResultsItem)):
             return item
@@ -139,11 +154,14 @@ class SQLAlchemyPipeline(object):
                                 # Raceid =self.get_id(session, HKRace, "PublicRaceIndex", {"PublicRaceIndex": item["RacecourseCode"] + item[
                                                                                        # "RaceDate"] + item["RaceNumber"]}),
 
-                                Raceid=self.get_id(session, HKRace, "PublicRaceIndex", {"Url": item.get("Url", None),
+                                Raceid=self.get_id(session, HKRace, "PublicRaceIndex", {
+                                                                                    "Url": item.get("Url", None),
                                                                                    "RacecourseCode": item["RacecourseCode"],
                                                                                    "RaceDate": item["RaceDate"],
                                                                                    "Name": item["Name"],
-                                                                                   "RaceNumber": item["RaceNumber"],
+                                                                                   # "Inraceimage": item["images"],
+                                                                                   # "Inraceimage": item["images"][0]['data'],
+                                                                                   "RaceNumber": int(item["RaceNumber"]),
                                                                                    "Prizemoney": item.get("Prizemoney", None),
                                                                                    "Raceratingspan": item.get("Raceratingspan", None),
                                                                                    "Surface": item.get("Surface", None),
@@ -151,7 +169,7 @@ class SQLAlchemyPipeline(object):
                                                                                    "RaceIndex": item.get("RaceIndex", None),
                                                                                    # "Winodds": item["Winodds"],
                                                                                    "PublicRaceIndex": item["RacecourseCode"] +
-                                                                                       item["RaceDate"] + item["RaceNumber"],
+                                                                                       item["RaceDate"] + str(item["RaceNumber"]),
                                                                                     "Raceclassid": self.get_id(session, Raceclass, "Name", {"Name": item.get("Raceclass", None)}),
                                                                                     "Railtypeid": self.get_id(session, Railtype, "Name", {"Name": item.get("Railtype", None)}),
                                                                                     "Goingid": self.get_id(session, Going, "Name", {"Name": item.get("Going", None)}),
@@ -161,8 +179,11 @@ class SQLAlchemyPipeline(object):
                                                                                     "Furlongs": int(int(item.get("Distance", 0))/200)
 
                                     }),
-                                       "HKDividendid": self.get_id(session, HKDividend, "RaceDate", {"RaceDate": item["RaceDate"], "RaceNumber": item["RaceNumber"],
+                                       "HKDividendid": 
+                                       self.get_id(session, HKDividend, "PublicRaceIndex", {
+                                        "RaceDate": item["RaceDate"], "RaceNumber": item["RaceNumber"],
                                         "RacecourseCode": item.get("RacecourseCode", None),
+                                         "PublicRaceIndex": item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]),
                                        "WinDiv": item.get("WinDiv", None), "Place1Div":item.get("Place1Div"), "Place2Div": item.get("Place2Div", None), "Place3Div":item.get("Place3Div", None),
                                         "QNDiv": item.get("QNDiv", None), "QP12Div": item.get("QP12Div"), "QP13Div": item.get("QP13Div", None), "QP23Div": item.get("QP23Div", None),  
                                         "TierceDiv": item.get("TierceDiv"), "TrioDiv": item.get("TrioDiv", None), "FirstfourDiv": item.get("FirstfourDiv", None), "QuartetDiv": item.get("QuartetDiv", None),
@@ -196,7 +217,9 @@ class SQLAlchemyPipeline(object):
                                  ActualWt=item["ActualWt"],
                                  DeclarHorseWt=item["DeclarHorseWt"],
                                  Draw=item.get("Draw", None),
-                                 LBW=item.get("LBW", None),
+                                 LBW = item.get("LBW", None),
+                                 isVetScratched = item.get("isVetScratched", None),
+                                 # LBW= getLBW(item.get("LBW", None),item.get("Place", None), item.get("LBWFirst", None)),
                                  RunningPosition=item.get("RunningPosition", None),
                                  Sec1DBL=item.get("Sec1DBL", None),
                                  Sec2DBL=item.get("Sec2DBL", def_DBL),
@@ -212,7 +235,9 @@ class SQLAlchemyPipeline(object):
                                  Sec5Time=item.get("Sec5time", def_time),
                                  Sec6Time=item.get("Sec6time", def_time),
                                  WinOdds=item.get("Winodds", None),
-                                 HorseReport=item.get("HorseReport", None)
+                                 HorseReport=item.get("HorseReport", None),
+                                 Place = item.get("Place", None)
+                                 #computations LBW winner is - LBW 2nd place
 
                                  ) 
     
@@ -245,6 +270,7 @@ class SQLAlchemyPipeline(object):
         # log.msg("[%s] %s cache hit for '%s'" % (self.__class__.__name__, model, fval), logLevel=log.DEBUG)
         return id
 
+# @dbdefer
 class ByteStorePipeline(ImagesPipeline):
   def media_downloaded(self, response, request, info):
         referer = request.headers.get('Referer')

@@ -21,6 +21,10 @@ def tf(values, encoding="utf-8"):
     return value.encode(encoding).strip()
 
 
+
+#extend to include vet reports
+
+
 class HorsesSpider(scrapy.Spider):
     name = "hktrackwork"
     allowed_domains = ["hkjc.com"]

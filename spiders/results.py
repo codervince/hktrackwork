@@ -14,7 +14,7 @@ import re
 import pprint
 import logging
 from scrapy.log import ScrapyFileLogObserver
-
+import itertools
 
 def getHorseReport(ir, h):
     lir = ir.split('.')
@@ -81,7 +81,15 @@ def try_int(value):
     try:
         return int(value)
     except:
-        return 0    
+        return 0
+
+#for scratched gets None
+def try_placeint(value):
+    try:
+        return int(value)
+    except:
+        return None 
+
 def identity(value):
     return value
 
@@ -107,6 +115,7 @@ class ResultsItemsLoader(ItemLoader):
     Sec6time_out = Compose(default_output_processor, timeprocessor)
     LBW_out = Compose(default_output_processor, horselengthprocessor)
     Draw_out = Compose(default_output_processor, try_int)
+    Place_out = Compose(default_output_processor, try_placeint)
     HorseNumber_out = Compose(default_output_processor, noentryprocessor)
     Sec1DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec2DBL_out = Compose(default_output_processor, horselengthprocessor)
@@ -114,6 +123,8 @@ class ResultsItemsLoader(ItemLoader):
     Sec4DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec5DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec6DBL_out = Compose(default_output_processor, horselengthprocessor)
+    RaceNumber_out = Compose(default_output_processor, try_int)
+    HorseNumber_out = Compose(default_output_processor, try_int)
     # image_urls_out = MapCompose(_cleanurl) 
     RunningPosition_out = Join(' ')
     image_urls_out = Compose(identity)
@@ -130,7 +141,7 @@ class ResultsSpider(scrapy.Spider):
             raise ValueError("Invalid spider parameters")
         self.racedate = date
         self.racecode = coursecode
-        logfile = open('testlog.log', 'w')
+        logfile = open('testlog2.log', 'w')
         log_observer = ScrapyFileLogObserver(logfile, level=logging.DEBUG)
         log_observer.start()
 
@@ -210,11 +221,12 @@ class ResultsSpider(scrapy.Spider):
                 else:
                     l.add_value("Raceratingspan", None)                
                 #get incident report
+                if response.xpath("//td[contains(text(), \"Racing Incident Report\")]"):
                 # l.add_value("Incidentreport", response.xpath("//td[contains(text(), \"Racing Incident Report\")]/following::tr/td/text()").extract()[0].strip())
-                ir = response.xpath("//td[contains(text(), \"Racing Incident Report\")]/following::tr/td/text()").extract()[0].strip()
-                h = tr.xpath("./td[3]/a/text()").extract()[0]
-                l.add_value("HorseReport", '..'.join(getHorseReport(ir, h)))
-                l.add_value("IncidentReport", ir)
+                    ir = response.xpath("//td[contains(text(), \"Racing Incident Report\")]/following::tr/td/text()").extract()[0].strip()
+                    h = tr.xpath("./td[3]/a/text()").extract()[0]
+                    l.add_value("HorseReport", '..'.join(getHorseReport(ir, h)))
+                    l.add_value("IncidentReport", ir)
                 #table starts here
                 l.add_xpath("Place", "./td[1]/text()")
                 l.add_xpath("HorseNumber", "./td[2]/text()")
@@ -230,6 +242,11 @@ class ResultsSpider(scrapy.Spider):
                 l.add_xpath("RunningPosition", "./td[10]//td/text()")
                 l.add_xpath("FinishTime", "./td[11]/text()")
                 l.add_xpath("Winodds", "./td[12]/text()")
+                if tr.xpath("./td[1]/text()").extract()[0] in ["WV"]:
+                    l.add_value("isVetScratched",True)
+                else:
+                    l.add_value("isVetScratched",False)
+                # l.add_xpath("LBWFirst", int(tr.xpath("./td[9]/text()").extract()[0])*-1.0)
                 #get odds data
                 oddspath = response.xpath('//td[@class= "number14 tdAlignR"]/text()')
                 headers = response.xpath('//td[@class= "number14 tdAlignR"]/preceding-sibling::td/text()').extract()
@@ -246,22 +263,23 @@ class ResultsSpider(scrapy.Spider):
                 l.add_value("FirstfourDiv", oddspath[10].extract().replace(',', ''))
                 #optionals
 
-                newformatdate = datetime.strptime('20150115', '%Y%M%d')
-                theracedate = datetime.strptime(theracedate, '%Y%M%d')
+                newformatdate = datetime.strptime('20150115', '%Y%m%d')
+                theracedate = datetime.strptime(theracedate, '%Y%m%d')
 
                 r_finddble = r'.*DOUBLE.*'
                 r_findtrble = r'.*TREBLE.*'
                 r_finddbletrio = r'.*DOUBLE TRIO.*'
-                r_findtripletrio = r'.*TRIPLE TRIO.*'
+                r_findtripletrio = r'TRIPLE TRIO$'
                 r_findquartet = r'.*QUARTET.*'
                 r_findsixup = r'.*SIX UP.*'
-
+                r_findtripletriocons = r'.*TRIPLE TRIO\(Consolation\)$'
                 hasdble = len([m.group(0) for m in (re.search(r_finddble, l) for l in headers) if m]) == 1
                 hasdbletrio = len([m.group(0) for m in (re.search(r_finddbletrio, l) for l in headers) if m]) ==1
                 hastrble = len([m.group(0) for m in (re.search(r_findtrble, l) for l in headers) if m]) ==1
                 hastripletrio = len([m.group(0) for m in (re.search(r_findtripletrio, l) for l in headers) if m]) ==1
                 hasquartet = len([m.group(0) for m in (re.search(r_findquartet, l) for l in headers) if m]) == 1
                 hassixup = len([m.group(0) for m in (re.search(r_findsixup, l) for l in headers) if m]) == 1
+                hastripletriocons = len([m.group(0) for m in (re.search(r_findtripletriocons, l) for l in headers) if m]) ==1
 
                 if theracedate > newformatdate:
                     #quartets every race
@@ -282,31 +300,45 @@ class ResultsSpider(scrapy.Spider):
                         l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
                         l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
                         l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
-
                         try: 
                             l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
                         except:
-                            pass    
+                            l.add_value("SixUpBonusDiv", None)   
 
                 else:
                     #quartets limited to races X and Y
-                    if hasdble:
+                    if hasdble: #all but race 1
                         l.add_value("ThisDouble11Div", oddspath[11].extract().replace(',', ''))
                         l.add_value("ThisDouble12Div", oddspath[12].extract().replace(',', ''))    
                     if hasdbletrio and not hastrble and not hassixup:
+                        l.add_value("ThisDouble11Div", oddspath[11].extract().replace(',', ''))
+                        l.add_value("ThisDouble12Div", oddspath[12].extract().replace(',', '')) 
                         l.add_value("ThisDoubleTrioDiv", oddspath[13].extract().replace(',', ''))
+                    if hastripletriocons and not hastripletrio:
+                        l.add_value("TripleTrio112Div", oddspath[13].extract().replace(',', ''))    
                     if hastripletrio:
                         l.add_value("TripleTrio111Div", oddspath[13].extract().replace(',', ''))
-                        l.add_value("TripleTrio112Div", oddspath[14].extract().replace(',', ''))
+                        if hastripletriocons:
+                            l.add_value("TripleTrio112Div", oddspath[14].extract().replace(',', ''))
                     if hassixup:
                         l.add_value("QuartetDiv", oddspath[11].extract().replace(',', ''))
                         l.add_value("ThisDouble11Div", oddspath[12].extract().replace(',', ''))
                         l.add_value("ThisDouble12Div", oddspath[13].extract().replace(',', ''))
                         l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
                         l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
-                        l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
-                        l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
-                        l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
+                        if hasdbletrio:
+                            l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
+                            l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
+                            try:
+                                l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
+                            except:
+                                l.add_value("SixUpBonusDiv", None)
+                        else:
+                            l.add_value("SixUpDiv", oddspath[16].extract().replace(',', ''))
+                            try:
+                                l.add_value("SixUpBonusDiv", oddspath[17].extract().replace(',', ''))
+                            except:
+                                l.add_value("SixUpBonusDiv", None)    
                 i = l.load_item()
                 table_data.append(i)
 
@@ -318,13 +350,17 @@ class ResultsSpider(scrapy.Spider):
 
     def parse_sectional(self, response):
         table_data = response.meta["table_data"]
-        for item, tr in zip(table_data, response.xpath("//table[@cellspacing=1 and @width='100%']//td[@rowspan=2]/..")):
-            ntr = tr.xpath("./following-sibling::tr[1]")
-            l = ResultsItemsLoader(item=item, selector=tr)
-            for i in range(4,10):
-                j = i-3
-                l.add_xpath("Sec%sDBL" % j, "./td[%s]/table/tr/td[2]/text()" % i)
-                l.add_xpath("Sec%stime" % j, "./following-sibling::tr[1]/td[%s]/text()" % j)
+        for item, tr in itertools.izip_longest(table_data, response.xpath("//table[@cellspacing=1 and @width='100%']//td[@rowspan=2]/..")):
+        # for item, tr in zip(table_data, response.xpath("//table[@cellspacing=1 and @width='100%']//td[@rowspan=2]/..")):
+            try: 
+                ntr = tr.xpath("./following-sibling::tr[1]")
+                l = ResultsItemsLoader(item=item, selector=tr)
+                for i in range(4,10):
+                    j = i-3
+                    l.add_xpath("Sec%sDBL" % j, "./td[%s]/table/tr/td[2]/text()" % i)
+                    l.add_xpath("Sec%stime" % j, "./following-sibling::tr[1]/td[%s]/text()" % j)
+            except:
+                l = ResultsItemsLoader(item=item, selector=tr)
             yield l.load_item()
 
 

@@ -40,6 +40,7 @@ class ResultsItem(scrapy.Item):
     DeclarHorseWt = scrapy.Field()
     Draw = scrapy.Field()
     LBW = scrapy.Field()
+    isVetScratched = scrapy.Field()
     RunningPosition = scrapy.Field()
     FinishTime = scrapy.Field()
     Winodds = scrapy.Field()
