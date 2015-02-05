@@ -90,6 +90,7 @@ def try_placeint(value):
     except:
         return None 
 
+
 def identity(value):
     return value
 
@@ -115,7 +116,8 @@ class ResultsItemsLoader(ItemLoader):
     Sec6time_out = Compose(default_output_processor, timeprocessor)
     LBW_out = Compose(default_output_processor, horselengthprocessor)
     Draw_out = Compose(default_output_processor, try_int)
-    Place_out = Compose(default_output_processor, try_placeint)
+    PlaceNum_out = Compose(default_output_processor, try_placeint)
+    Place_out = Compose(default_output_processor)
     HorseNumber_out = Compose(default_output_processor, noentryprocessor)
     Sec1DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec2DBL_out = Compose(default_output_processor, horselengthprocessor)
@@ -229,6 +231,7 @@ class ResultsSpider(scrapy.Spider):
                     l.add_value("IncidentReport", ir)
                 #table starts here
                 l.add_xpath("Place", "./td[1]/text()")
+                l.add_xpath("PlaceNum", "./td[1]/text()")
                 l.add_xpath("HorseNumber", "./td[2]/text()")
                 l.add_xpath("Horse", "./td[3]/a/text()")
                 l.add_xpath("HorseCode", "./td[3]/text()", re="\((.+?)\)")
@@ -242,11 +245,14 @@ class ResultsSpider(scrapy.Spider):
                 l.add_xpath("RunningPosition", "./td[10]//td/text()")
                 l.add_xpath("FinishTime", "./td[11]/text()")
                 l.add_xpath("Winodds", "./td[12]/text()")
-                if tr.xpath("./td[1]/text()").extract()[0] in ["WV"]:
-                    l.add_value("isVetScratched",True)
+                # if tr.xpath("./td[1]/text()").extract()[0] == '2':
+                #     l.add_xpath("LBWFirst", int(  horselengthprocessor( tr.xpath("./td[9]/text()").extract()[0])) *-1.0)
+
+                if tr.xpath("./td[1]/text()").extract()[0] in ["WV", "WV-A", "WX", "WX-A", "WR"]:
+                    l.add_value("isScratched",True)
                 else:
-                    l.add_value("isVetScratched",False)
-                # l.add_xpath("LBWFirst", int(tr.xpath("./td[9]/text()").extract()[0])*-1.0)
+                    l.add_value("isScratched",False)
+                
                 #get odds data
                 oddspath = response.xpath('//td[@class= "number14 tdAlignR"]/text()')
                 headers = response.xpath('//td[@class= "number14 tdAlignR"]/preceding-sibling::td/text()').extract()
@@ -265,6 +271,8 @@ class ResultsSpider(scrapy.Spider):
 
                 newformatdate = datetime.strptime('20150115', '%Y%m%d')
                 theracedate = datetime.strptime(theracedate, '%Y%m%d')
+                l.add_value("Dayofweek", datetime.strftime(theracedate, '%A'))
+
 
                 r_finddble = r'.*DOUBLE.*'
                 r_findtrble = r'.*TREBLE.*'

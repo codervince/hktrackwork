@@ -1,0 +1,1423 @@
+2015-02-04 14:03:14+1100 [-] Log opened.
+2015-02-04 14:18:13+1100 [-] Log opened.
+2015-02-04 14:18:16+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:18:16+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:18:31+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:18:31+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:18:41+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:18:41+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:18:57+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:18:57+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:19:14+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:19:14+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:19:36+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:19:36+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:19:40+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:19:40+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:19:43+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:19:43+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:19:46+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:19:46+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:19:50+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:19:50+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:19:58+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:19:58+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:05+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:05+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:08+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:08+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:11+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:11+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:14+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:14+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:29+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:29+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:33+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:33+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:36+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:36+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:39+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:39+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:20:42+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:20:42+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:00+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:00+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:06+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:06+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:16+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:16+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:22+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:22+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:25+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:25+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:30+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:30+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:45+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:45+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:21:48+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:21:48+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:22:08+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:22:08+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:22:31+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:22:31+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:22:37+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:22:37+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:22:48+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:22:48+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:22:51+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:22:51+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:22:54+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:22:54+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:22:57+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:22:57+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:23:00+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:23:00+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:23:00+1100 [-] Traceback (most recent call last):
+2015-02-04 14:23:00+1100 [-]   File "auto.py", line 34, in <module>
+2015-02-04 14:23:00+1100 [-]     l.stop()
+2015-02-04 14:23:00+1100 [-]   File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 181, in stop
+2015-02-04 14:23:00+1100 [-]     assert self.running, ("Tried to stop a LoopingCall that was "
+2015-02-04 14:23:00+1100 [-] AssertionError: Tried to stop a LoopingCall that was not running.
+2015-02-04 14:57:04+1100 [-] Log opened.
+2015-02-04 14:57:08+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:57:08+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:57:25+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:57:25+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:57:37+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:57:37+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:57:42+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:57:42+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:57:45+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:57:45+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:05+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:05+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:08+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:08+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:29+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:29+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:32+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:32+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:36+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:36+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:39+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:39+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:43+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:43+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:47+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:47+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:54+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:54+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:58:57+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:58:57+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:09+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:09+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:13+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:13+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:17+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:17+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:20+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:20+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:23+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:23+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:26+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:26+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:37+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:37+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:40+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:40+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:50+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:50+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 14:59:53+1100 [-] Unhandled error in Deferred:
+2015-02-04 14:59:53+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:00:00+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:00:00+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:00:02+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:00:02+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:00:12+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:00:12+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:00:24+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:00:24+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:00:49+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:00:49+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:00:54+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:00:54+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:01:09+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:01:09+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:01:14+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:01:14+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:01:17+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:01:17+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:01:20+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:01:20+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:01:22+1100 [-] Unhandled error in Deferred:
+2015-02-04 15:01:22+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 15:01:22+1100 [-] Traceback (most recent call last):
+2015-02-04 15:01:22+1100 [-]   File "auto.py", line 34, in <module>
+2015-02-04 15:01:22+1100 [-]     l.stop()
+2015-02-04 15:01:22+1100 [-]   File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 181, in stop
+2015-02-04 15:01:22+1100 [-]     assert self.running, ("Tried to stop a LoopingCall that was "
+2015-02-04 15:01:22+1100 [-] AssertionError: Tried to stop a LoopingCall that was not running.
+2015-02-04 16:10:18+1100 [-] Log opened.
+2015-02-04 16:10:19+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:19+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:10:20+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:20+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:10:20+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:20+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:10:20+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:20+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:10:49+1100 [-] Log opened.
+2015-02-04 16:10:50+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:50+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:10:50+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:50+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:10:51+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:51+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:10:51+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:10:51+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:11:41+1100 [-] Log opened.
+2015-02-04 16:11:46+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:11:46+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:00+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:00+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:08+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:08+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:21+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:21+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:25+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:25+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:28+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:28+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:31+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:31+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:34+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:34+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:37+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:37+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:40+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:40+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:49+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:49+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:55+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:55+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:12:58+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:12:58+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:13:02+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:13:02+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:13:05+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:13:05+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:13:18+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:13:18+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:13:21+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:13:21+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:13:42+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:13:42+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:13:45+1100 [-] Unhandled error in Deferred:
+2015-02-04 16:13:45+1100 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "auto.py", line 32, in <module>
+	    l.start(1.0) #call every second
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 173, in start
+	    self()
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/task.py", line 218, in __call__
+	    d = defer.maybeDeferred(self.f, *self.a, **self.kw)
+	--- <exception caught here> ---
+	  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/twisted/internet/defer.py", line 139, in maybeDeferred
+	    result = f(*args, **kw)
+	exceptions.TypeError: 'NoneType' object is not callable
+	
+2015-02-04 16:14:47+1100 [-] Log opened.
+2015-02-04 16:27:34+1100 [-] Log opened.
+2015-02-04 16:27:34+1100 [-] Log opened.
+2015-02-04 16:28:11+1100 [-] Log opened.
+2015-02-04 16:28:11+1100 [-] Log opened.
+2015-02-04 16:29:24+1100 [-] Log opened.
+2015-02-04 16:29:24+1100 [-] Log opened.
+2015-02-04 16:30:15+1100 [-] Log opened.
+2015-02-04 16:30:15+1100 [-] Log opened.
+2015-02-04 16:31:26+1100 [-] Log opened.
+2015-02-04 16:31:26+1100 [-] Log opened.
+2015-02-04 16:31:54+1100 [-] Log opened.
+2015-02-04 16:31:54+1100 [-] Log opened.
+2015-02-04 16:47:51+1100 [-] Log opened.
+2015-02-04 16:47:51+1100 [-] Log opened.
+2015-02-04 17:55:10+1100 [-] Log opened.
+2015-02-04 17:55:10+1100 [-] Log opened.
+2015-02-04 17:59:52+1100 [-] Log opened.
+2015-02-04 17:59:52+1100 [-] Log opened.

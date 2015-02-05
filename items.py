@@ -31,6 +31,7 @@ class ResultsItem(scrapy.Item):
     RaceNumber = scrapy.Field()
     Name = scrapy.Field()
     Place = scrapy.Field()
+    PlaceNum = scrapy.Field()
     HorseNumber = scrapy.Field()
     Horse = scrapy.Field()
     HorseCode = scrapy.Field()
@@ -40,10 +41,12 @@ class ResultsItem(scrapy.Item):
     DeclarHorseWt = scrapy.Field()
     Draw = scrapy.Field()
     LBW = scrapy.Field()
-    isVetScratched = scrapy.Field()
+    isScratched = scrapy.Field()
     RunningPosition = scrapy.Field()
     FinishTime = scrapy.Field()
     Winodds = scrapy.Field()
+    LBWFirst = scrapy.Field()
+    Dayofweek = scrapy.Field()
     #sectionals page
     Sec1DBL = scrapy.Field()  #not nullable e.g. 3/4 , 1/1/4 top right of '1st Sec', '2nd Sec' box
     Sec1time = scrapy.Field() #Time object e.g. '00:00:13.24'

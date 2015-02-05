@@ -48,7 +48,7 @@ DATABASE = {'drivername': 'postgres',
             'port': '5432',
             'username': 'vmac',
             'password': '',
-            'database': 'hkraces31'}
+            'database': 'hkraces'}
 
 #mysql testing
 #DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}
@@ -58,12 +58,14 @@ DATABASE = {'drivername': 'postgres',
 USER_AGENT = "Googlebot/2.1 ( http://www.google.com/bot.html)"
 IMAGES_STORE = '/Users/vmac/RACING/HKG/scrapers/dist/hkjc/images'
 #npt filter dups default 'scrapy.dupefilter.RFPDupeFilter'
-DUPEFILTER_CLASS = 'scrapy.dupefilter.BaseDupeFilter' 
+# DUPEFILTER_CLASS = 'scrapy.dupefilter.BaseDupeFilter' 
 
 # LOG_FILE = 
 # DUPEFILTER_DEBUG = True
 # WEBSERVICE_PORT = 6090
-WEBSERVICE_LOGFILE = '/Users/vmac/RACING/HKG/scrapers/dist/hkjc/webservice.log'
+WEBSERVICE_LOGFILE = '/Users/vmac/RACING1/HKG/scrapers/dist/hkjc/webservice.log'
 
 # 0.25 ms
 DOWNLOAD_DELAY = 0.25
+
+LOG_FILE = '/Users/vmac/RACING1/HKG/scrapers/dist/hkjc/logs/scrapylog.log'

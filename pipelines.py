@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Define your item pipelines here
-#
+#/Users/vmac/RACING1/HKG/scrapers/dist/hkjc
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import scrapy
@@ -53,8 +53,40 @@ def getLBW(lbw, place, LBWFirst):
         return LBWFirst
     else:
         return lbw
-                            
-   
+
+def getnosectionals(distance):
+    if distance is None or distance == 0:
+        return 0
+    else:
+        return {
+        '1000': 3,
+        '1100': 3,
+        '1200': 3,
+        '1400': 4,
+        '1500': 4,
+        '1600': 4,
+        '1650': 4,
+        '1700': 5,
+        '1750': 5,
+        '1800': 5,
+        '1900': 5,
+        '2000': 6,
+        '2200': 6,
+        '2400': 6
+        }.get(str(distance),0)
+
+def gethorseprize(placenum, prizemoney):
+    # print (place, float(prizemoney))
+    if placenum is None or prizemoney is None:
+        return None
+    # print (place, prizemoney)
+    return {
+        '1': float(57.0*float(prizemoney))/100.0,
+        '2': float(22.0*float(prizemoney))/100.0,
+        '3': float(11.5*float(prizemoney))/100.0,
+        '4': float(6.0*float(prizemoney))/100.0,
+        '5': float(3.5*float(prizemoney))/100.0
+    }.get(str(placenum), 0.0)
 #inraceimage one per race
 # @dbdefer
 class MyImagesPipeline(ImagesPipeline):
@@ -155,7 +187,7 @@ class SQLAlchemyPipeline(object):
                                                                                        # "RaceDate"] + item["RaceNumber"]}),
 
                                 Raceid=self.get_id(session, HKRace, "PublicRaceIndex", {
-                                                                                    "Url": item.get("Url", None),
+                                                                                   "Url": item.get("Url", None),
                                                                                    "RacecourseCode": item["RacecourseCode"],
                                                                                    "RaceDate": item["RaceDate"],
                                                                                    "Name": item["Name"],
@@ -167,6 +199,8 @@ class SQLAlchemyPipeline(object):
                                                                                    "Surface": item.get("Surface", None),
                                                                                    "IncidentReport": item.get("IncidentReport", None),
                                                                                    "RaceIndex": item.get("RaceIndex", None),
+                                                                                   "Dayofweek": item.get("Dayofweek", None),
+                                                                                   "NoSectionals": getnosectionals(item.get("Distance", 0)),
                                                                                    # "Winodds": item["Winodds"],
                                                                                    "PublicRaceIndex": item["RacecourseCode"] +
                                                                                        item["RaceDate"] + str(item["RaceNumber"]),
@@ -218,7 +252,7 @@ class SQLAlchemyPipeline(object):
                                  DeclarHorseWt=item["DeclarHorseWt"],
                                  Draw=item.get("Draw", None),
                                  LBW = item.get("LBW", None),
-                                 isVetScratched = item.get("isVetScratched", None),
+                                 isScratched = item.get("isScratched", None),
                                  # LBW= getLBW(item.get("LBW", None),item.get("Place", None), item.get("LBWFirst", None)),
                                  RunningPosition=item.get("RunningPosition", None),
                                  Sec1DBL=item.get("Sec1DBL", None),
@@ -236,10 +270,24 @@ class SQLAlchemyPipeline(object):
                                  Sec6Time=item.get("Sec6time", def_time),
                                  WinOdds=item.get("Winodds", None),
                                  HorseReport=item.get("HorseReport", None),
-                                 Place = item.get("Place", None)
-                                 #computations LBW winner is - LBW 2nd place
+                                 PlaceNum = item.get("PlaceNum", None),
+                                 Place = item.get("Place", None),
+                                 #computations: horseprize, 
+                                 Horseprize = gethorseprize(item.get("PlaceNum", None), item.get("Prizemoney", None)),
+                                 PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]) + item["Horse"]
 
-                                 ) 
+                                 )
+        #need last updated
+        #do ranks and counts ru. OddsRank, Av Prizemoney Rank, ru.weightbelowtop
+        #  ra. FieldSize, ra.dayofweek, ra.isnight, ru.isoace, ru.ismidfield, ru.isleader, isbackmarker, ismadeall, 
+        #is favorite, isoddson, onetrickjockey NOT HK
+        #LBW winners = 2nd x -1
+
+
+        #(HKodds wasfavorite, 
+
+
+        #do historical comparison for times table noFUPs, noFS, noMdns, noLSWS,
     
         try:
             session.add(trackwork)
