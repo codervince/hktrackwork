@@ -35,7 +35,29 @@ def timeprocessor(value):
         except:
             pass
     return None
-    
+
+#dead heats
+def processplace(place):
+    # r_dh = r'.*[0-9].*DH$'
+    if place is None:
+        return None
+    elif "DH" in place:
+        return int(place.replace("DH", ''))
+    else:
+        return 
+        {
+    "WV": 99,
+    "WV-A": 99,
+    "WX": 99,
+    "WX-A": 99,
+    "UV": 99,
+    "DISQ": 99,
+    "FE": 99,
+    "DNF":99,
+    "PU": 99,
+    "TNP":99,
+    "UR": 99,
+    }.get(str(place), int(place))
 
  #add Fractionprocessor here to convert fractions to ints for SecDBL and LBW  
 def horselengthprocessor(value):
@@ -116,8 +138,8 @@ class ResultsItemsLoader(ItemLoader):
     Sec6time_out = Compose(default_output_processor, timeprocessor)
     LBW_out = Compose(default_output_processor, horselengthprocessor)
     Draw_out = Compose(default_output_processor, try_int)
-    PlaceNum_out = Compose(default_output_processor, try_placeint)
-    Place_out = Compose(default_output_processor)
+    Place_out = Compose(default_output_processor, processplace)
+    PlaceNum_out = Compose(default_output_processor)
     HorseNumber_out = Compose(default_output_processor, noentryprocessor)
     Sec1DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec2DBL_out = Compose(default_output_processor, horselengthprocessor)
@@ -248,7 +270,7 @@ class ResultsSpider(scrapy.Spider):
                 # if tr.xpath("./td[1]/text()").extract()[0] == '2':
                 #     l.add_xpath("LBWFirst", int(  horselengthprocessor( tr.xpath("./td[9]/text()").extract()[0])) *-1.0)
 
-                if tr.xpath("./td[1]/text()").extract()[0] in ["WV", "WV-A", "WX", "WX-A", "WR"]:
+                if tr.xpath("./td[1]/text()") and (tr.xpath("./td[1]/text()").extract()[0] in ["WV", "WV-A", "WX", "WX-A", "WR"]):
                     l.add_value("isScratched",True)
                 else:
                     l.add_value("isScratched",False)
@@ -256,24 +278,34 @@ class ResultsSpider(scrapy.Spider):
                 #get odds data
                 oddspath = response.xpath('//td[@class= "number14 tdAlignR"]/text()')
                 headers = response.xpath('//td[@class= "number14 tdAlignR"]/preceding-sibling::td/text()').extract()
+
+
+                r_findqp = r'.*QUINELLA PLACE$'
+                hasqp= len([m.group(0) for m in (re.search(r_findqp, l) for l in headers) if m]) == 1
+
                 l.add_value("WinDiv", oddspath[0].extract().replace(',', ''))
                 l.add_value("Place1Div", oddspath[1].extract().replace(',', ''))
                 l.add_value("Place2Div", oddspath[2].extract().replace(',', ''))
                 l.add_value("Place3Div", oddspath[3].extract().replace(',', ''))
-                l.add_value("QNDiv", oddspath[4].extract().replace(',', ''))
-                l.add_value("QP12Div", oddspath[5].extract().replace(',', ''))
-                l.add_value("QP13Div", oddspath[6].extract().replace(',', ''))
-                l.add_value("QP23Div", oddspath[7].extract().replace(',', ''))
-                l.add_value("TierceDiv", oddspath[8].extract().replace(',', ''))
-                l.add_value("TrioDiv", oddspath[9].extract().replace(',', ''))
-                l.add_value("FirstfourDiv", oddspath[10].extract().replace(',', ''))
+                l.add_value("QNDiv", oddspath[4].extract().replace(',', ''))             
+                if r_findqp:
+                    l.add_value("QP12Div", oddspath[5].extract().replace(',', ''))
+                    l.add_value("QP13Div", oddspath[6].extract().replace(',', ''))
+                    l.add_value("QP23Div", oddspath[7].extract().replace(',', ''))
+                    l.add_value("TierceDiv", oddspath[8].extract().replace(',', ''))
+                    l.add_value("TrioDiv", oddspath[9].extract().replace(',', ''))
+                    l.add_value("FirstfourDiv", oddspath[10].extract().replace(',', ''))
+                else:
+                    l.add_value("TierceDiv", oddspath[5].extract().replace(',', ''))
+                    l.add_value("TrioDiv", oddspath[6].extract().replace(',', ''))
+                    l.add_value("FirstfourDiv", oddspath[7].extract().replace(',', ''))
                 #optionals
 
                 newformatdate = datetime.strptime('20150115', '%Y%m%d')
                 theracedate = datetime.strptime(theracedate, '%Y%m%d')
                 l.add_value("Dayofweek", datetime.strftime(theracedate, '%A'))
 
-
+                r_findqp23Div = r'.*QUINELLA PLACE$'
                 r_finddble = r'.*DOUBLE.*'
                 r_findtrble = r'.*TREBLE.*'
                 r_finddbletrio = r'.*DOUBLE TRIO.*'
@@ -281,6 +313,7 @@ class ResultsSpider(scrapy.Spider):
                 r_findquartet = r'.*QUARTET.*'
                 r_findsixup = r'.*SIX UP.*'
                 r_findtripletriocons = r'.*TRIPLE TRIO\(Consolation\)$'
+
                 hasdble = len([m.group(0) for m in (re.search(r_finddble, l) for l in headers) if m]) == 1
                 hasdbletrio = len([m.group(0) for m in (re.search(r_finddbletrio, l) for l in headers) if m]) ==1
                 hastrble = len([m.group(0) for m in (re.search(r_findtrble, l) for l in headers) if m]) ==1

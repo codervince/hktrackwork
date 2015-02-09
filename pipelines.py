@@ -1,30 +1,197 @@
 # -*- coding: utf-8 -*-
 
-# Define your item pipelines here
-#/Users/vmac/RACING1/HKG/scrapers/dist/hkjc
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
+from __future__ import print_function
+
+import logging
+from Queue import Queue, Empty
+from collections import defaultdict, Counter
+import pprint
+from hkjc.items import *
+from hkjc.models import *
+from scrapy.signalmanager import SignalManager
+from scrapy.signals import spider_closed
+from scrapy.xlib.pydispatch import dispatcher
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.sql.expression import ClauseElement
+from twisted.internet.defer import inlineCallbacks, returnValue
+from twisted.internet.threads import deferToThreadPool
+from twisted.python.threadable import isInIOThread
+from twisted.python.threadpool import ThreadPool
+from datetime import datetime, date
+
 import scrapy
 import pprint
 from scrapy.contrib.pipeline.images import ImagesPipeline
 from scrapy.exceptions import DropItem
 
-from collections import defaultdict
-from datetime import datetime
-
-from sqlalchemy.orm import sessionmaker, exc
-
-from scrapy.contrib.pipeline.files import FileException
-from scrapy import log
-import hashlib
-
-from hkjc.models import *
-from hkjc.items import *
+# Needed for multithreading, as I remember
+Session = scoped_session(sessionmaker(bind=engine))
 
 
-from sa_decorators import DBDefer
+def get_or_create(model, defaults=None, **kwargs):
+    ''' Short get or create implementation. Like in Django.
+    This can run within the read_pool
+    We don't use write scheduling here, because of very low amount of writes.
+    Optimization unneeded, as I think.
+    We use this function to prevent IntegrityError messages.
+    '''
 
-dbdefer = DBDefer(URL(**settings.DATABASE))
+    defaults = defaults or {}
+
+    session = Session()  # I'm thread safe =)
+
+    query = session.query(model).filter_by(**kwargs)
+
+    instance = query.first()
+
+    created = False
+
+    if not instance:
+        params = dict(
+            (k, v) for k, v in kwargs.iteritems()
+            if not isinstance(v, ClauseElement))
+        params.update(defaults)
+        instance = model(**params)
+
+        try:
+            session.add(instance)
+            session.commit()
+            created = True
+        except IntegrityError:
+            session.rollback()
+            instance = query.one()
+            created = False
+        except Exception:
+            session.close()
+            raise
+
+    session.refresh(instance)  # Refreshing before session close
+    session.close()
+    return instance, created
+
+
+class DBScheduler(object):
+    ''' Database operation scheduler
+    We will have one or more read thread and only one write thread.
+    '''
+
+    log = logging.getLogger('hkjc.DBScheduler')
+
+    def __init__(self):
+        from twisted.internet import reactor  # Imported here.inside
+
+        self.reactor = reactor
+
+        engine = get_engine()
+        create_schema(engine)
+
+        self.read_pool = ThreadPool(
+            minthreads=1, maxthreads=16, name="ReadPool")
+
+        self.write_pool = ThreadPool(
+            minthreads=1, maxthreads=1, name="WritePool")
+
+        self.read_pool.start()
+        self.write_pool.start()
+
+        self.signals = SignalManager(dispatcher.Any).connect(
+            self.stop_threadpools, spider_closed)
+
+        self.counters = defaultdict(lambda: Counter())
+
+        self.cache = defaultdict(
+            lambda: dict())
+
+        self.write_queue = Queue()
+        self.writelock = False  # Write queue mutex
+
+    def stop_threadpools(self):
+        self.read_pool.stop()
+        self.write_pool.stop()
+        for counter, results in self.counters.iteritems():
+            print(counter)
+            for modelname, count in results.iteritems():
+                print('  ', modelname.__name__, '-', count)
+
+    def _do_save(self):
+        assert not isInIOThread()
+
+        while not self.write_queue.empty():
+            items = []
+
+            try:
+                self.writelock = True
+                try:
+                    while True:
+                        items.append(self.write_queue.get_nowait())
+                except Empty:
+                    pass
+
+                session = Session()
+
+                try:
+                    session.add_all(items)
+                    session.commit()
+                except:
+                    session.rollback()
+                    raise
+                finally:
+                    session.close()
+            finally:
+                self.writelock = False
+
+    def save(self, obj):
+        self.write_queue.put(obj)
+
+        if self.writelock:
+            return None
+        else:
+            return deferToThreadPool(
+                self.reactor, self.write_pool, self._do_save)
+
+    def _do_get_id(self, model, unique, fval, fields):
+        assert not isInIOThread()
+
+        return Session().query(model).filter(
+            getattr(model, unique) == fval).one().id
+
+    @inlineCallbacks
+    def get_id(self, model, unique, fields):
+        ''' Get an ID from the cache or from the database.
+        If doesn't exist - create an item.
+        All database operations are done from
+        the separate thread
+        '''
+        assert isInIOThread()
+
+        fval = fields[unique]
+
+        try:
+            result = self.cache[model][fval]
+            self.counters['hit'][model] += 1
+            returnValue(result)
+        except KeyError:
+            self.counters['miss'][model] += 1
+
+        selectors = {unique: fval}
+
+        result, created = yield deferToThreadPool(
+            self.reactor, self.read_pool,
+            get_or_create,
+            model, fields, **selectors)
+
+        result = result.id
+
+        if created:
+            self.counters['db_create'][model] += 1
+        else:
+            self.counters['db_hit'][model] += 1
+
+        self.cache[model][fval] = result
+        returnValue(result)
+
+
 # metadata = MetaData(dbdefer.engine)
 
 def_time = datetime(year=1900, month=1, day=1).time()
@@ -123,200 +290,191 @@ class MyImagesPipeline(ImagesPipeline):
         item['image_urls'] = image_urls
         return item 
 
-
 class SQLAlchemyPipeline(object):
+
     def __init__(self):
-        engine = get_engine()
-        create_schema(engine)
 
-        self.Session = sessionmaker(bind=engine)
-        self.cache = defaultdict(lambda: defaultdict(lambda: None))
-        # metadata = sa.MetaData(dbdefer.engine) 
-        # TODO: get horsecolors!
-    # @dbdefer    
-    def process_item(self, item, spider):
-        if not isinstance(item, (HorseItem, ResultsItem)):
-            return item
+        self.scheduler = DBScheduler()
 
-        session = self.Session()
-        if isinstance(item, HorseItem):
-            trackwork = HKTrackwork(EventDate=item["EventDate"],
-                                    EventVenue=item["EventVenue"],
-                                    EventDescription=item["EventDescription"],
-                                    # ImportType=item["ImportType"],
-                                    # SireName=item["SireName"],
-                                    # DamName=item["DamName"],
-                                    # DamSireName=item["DamSireName"],
-                                    EventTypeid=self.get_id(session, EventType, "Name", {"Name": item["EventType"]}),
-                                    Ownerid=self.get_id(session, Owner, "Name",
-                                                        {"Name": item["Owner"], "Homecountry": item["Homecountry"]}),
-                                    Gearid=self.get_id(session, Gear, "Name", {"Name": item["Gear"]}),
-                                    Horseid=self.get_id(session, Horse, "Code",
-                                                        {"Code": item["HorseCode"], "Name": item["HorseName"], \
-                                                         "Homecountry": item["Homecountry"], \
-                                                         "SireName": item["SireName"], "DamName": item["DamName"], \
-                                                         "DamSireName": item["DamSireName"],
-                                                         "ImportType": item["ImportType"]
-                                                        }))
-
+    @inlineCallbacks
+    def process_item(self, item, spider): 
+            
         if isinstance(item, ResultsItem):
 
-
-            # racework = HKRace(
-            #     Url=item["Url"],
-            #     RacecourseCode = item["RacecourseCode"],
-            #     RaceNumber =  item["RaceNumber"],       
-            #     Prizemoney = item["Prizemoney"],
-            #     Raceratingspan = item.get("Raceratingspan", None),
-            #     Surface=item["Surface"],
-            #     IncidentReport = item["IncidentReport"],
-            #     RaceIndex = item["RaceIndex"],
-            #     PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + item["RaceNumber"],
-            #     Raceclassid= self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
-            #     Railtypeid = self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
-            #     Goingid = self.get_id(session, Going, "Name", {"Name": item["Going"]}),
-            #     Distanceid = self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),"Miles": float(float(item["Distance"])/1600.0),
-            #         "Furlongs": int(int(item["Distance"])/200) })
-                
-            #     )
-
-
-
-            trackwork = HKRunner(
-                                # Raceid =self.get_id(session, HKRace, "PublicRaceIndex", {"PublicRaceIndex": item["RacecourseCode"] + item[
-                                                                                       # "RaceDate"] + item["RaceNumber"]}),
-
-                                Raceid=self.get_id(session, HKRace, "PublicRaceIndex", {
-                                                                                   "Url": item.get("Url", None),
-                                                                                   "RacecourseCode": item["RacecourseCode"],
-                                                                                   "RaceDate": item["RaceDate"],
-                                                                                   "Name": item["Name"],
-                                                                                   # "Inraceimage": item["images"],
-                                                                                   # "Inraceimage": item["images"][0]['data'],
-                                                                                   "RaceNumber": int(item["RaceNumber"]),
-                                                                                   "Prizemoney": item.get("Prizemoney", None),
-                                                                                   "Raceratingspan": item.get("Raceratingspan", None),
-                                                                                   "Surface": item.get("Surface", None),
-                                                                                   "IncidentReport": item.get("IncidentReport", None),
-                                                                                   "RaceIndex": item.get("RaceIndex", None),
-                                                                                   "Dayofweek": item.get("Dayofweek", None),
-                                                                                   "NoSectionals": getnosectionals(item.get("Distance", 0)),
-                                                                                   # "Winodds": item["Winodds"],
-                                                                                   "PublicRaceIndex": item["RacecourseCode"] +
-                                                                                       item["RaceDate"] + str(item["RaceNumber"]),
-                                                                                    "Raceclassid": self.get_id(session, Raceclass, "Name", {"Name": item.get("Raceclass", None)}),
-                                                                                    "Railtypeid": self.get_id(session, Railtype, "Name", {"Name": item.get("Railtype", None)}),
-                                                                                    "Goingid": self.get_id(session, Going, "Name", {"Name": item.get("Going", None)}),
-                                                                                    "Distanceid": 
-                                                                                        self.get_id(session, Distance, "MetricName", {"MetricName": int(item.get("Distance", 0)     ),
-                                                                                    "Miles": float(float(item.get("Distance", 0)    )/1600.0),
-                                                                                    "Furlongs": int(int(item.get("Distance", 0))/200)
-
-                                    }),
-                                       "HKDividendid": 
-                                       self.get_id(session, HKDividend, "PublicRaceIndex", {
-                                        "RaceDate": item["RaceDate"], "RaceNumber": item["RaceNumber"],
+            hkdividendid = self.scheduler.get_id(
+                HKDividend, 'PublicRaceIndex',
+                {
+                    "PublicRaceIndex": item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]),
+                                        "RaceDate": item["RaceDate"], 
+                                        "RaceNumber": item["RaceNumber"],
                                         "RacecourseCode": item.get("RacecourseCode", None),
-                                         "PublicRaceIndex": item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]),
-                                       "WinDiv": item.get("WinDiv", None), "Place1Div":item.get("Place1Div"), "Place2Div": item.get("Place2Div", None), "Place3Div":item.get("Place3Div", None),
-                                        "QNDiv": item.get("QNDiv", None), "QP12Div": item.get("QP12Div"), "QP13Div": item.get("QP13Div", None), "QP23Div": item.get("QP23Div", None),  
-                                        "TierceDiv": item.get("TierceDiv"), "TrioDiv": item.get("TrioDiv", None), "FirstfourDiv": item.get("FirstfourDiv", None), "QuartetDiv": item.get("QuartetDiv", None),
-                                        "ThisDouble11Div": item.get("ThisDouble11Div", None), "ThisDouble12Div": item.get("ThisDouble12Div",None),"Treble111Div": item.get("Treble111Div", None), 
+                                        "PublicRaceIndex": item["RacecourseCode"] +
+                   item["RaceDate"] + str(item["RaceNumber"]),
+                                        "WinDiv": item.get("WinDiv", None), 
+                                       "Place1Div":item.get("Place1Div"), 
+                                       "Place2Div": item.get("Place2Div", None), 
+                                       "Place3Div":item.get("Place3Div", None),
+                                        "QNDiv": item.get("QNDiv", None), 
+                                        "QP12Div": item.get("QP12Div"), 
+                                        "QP13Div": item.get("QP13Div", None), 
+                                        "QP23Div": item.get("QP23Div", None),  
+                                        "TierceDiv": item.get("TierceDiv"), 
+                                        "TrioDiv": item.get("TrioDiv", None), 
+                                        "FirstfourDiv": item.get("FirstfourDiv", None), 
+                                        "QuartetDiv": item.get("QuartetDiv", None),
+                                        "ThisDouble11Div": item.get("ThisDouble11Div", None), 
+                                        "ThisDouble12Div": item.get("ThisDouble12Div",None),
+                                        "Treble111Div": item.get("Treble111Div", None), 
                                         "Treble112Div": item.get("Treble112Div",None),
-                                        "ThisDoubleTrioDiv": item.get("ThisDoubleTrioDiv", None), "TripleTrio111Div": item.get("TripleTrio111Div", None),
-                                         "TripleTrio112Div": item.get("TripleTrio112Div", None), "SixUpDiv": item.get("SixUpDiv", None), "SixUpBonusDiv": item.get("SixUpBonusDiv", None)
-
-                                       })
-
-                                                                                       }),
-                                 Horseid=self.get_id(session, Horse, "Code",
-                                                     {"Code": item["HorseCode"], "Name": item["Horse"],
-                                                      "Homecountry": "HKG"}),
-
-                                 # Raceclassid=self.get_id(session, Raceclass, "Name", {"Name": item["Raceclass"]}),
-                                 # Railtypeid=self.get_id(session, Railtype, "Name", {"Name": item["Railtype"]}),
-                                 # Goingid=self.get_id(session, Going, "Name", {"Name": item["Going"]}),
-                                 # Distanceid=self.get_id(session, Distance, "MetricName", {"MetricName": int(item["Distance"]),
-                                                                                    # "Miles": float(float(item["Distance"])/1600.0),
-                                                                                    # "Furlongs": int(int(item["Distance"])/200)
-
-                                    # }), 
-                                 HorseNumber=item.get("HorseNumber", def_int),
-                                 Jockeyid=self.get_id(session, Jockey, "Name",
-                                                      {"Name": item["Jockey"], "Homecountry": "HKG"}),
-                                 Trainerid=self.get_id(session, Trainer, "Name",
-                                                       {"Name": item["Trainer"], "Homecountry": "HKG"}),
-                                 Jockey=item["Jockey"],
-                                 Trainer=item["Trainer"],
-                                 ActualWt=item["ActualWt"],
-                                 DeclarHorseWt=item["DeclarHorseWt"],
-                                 Draw=item.get("Draw", None),
-                                 LBW = item.get("LBW", None),
-                                 isScratched = item.get("isScratched", None),
-                                 # LBW= getLBW(item.get("LBW", None),item.get("Place", None), item.get("LBWFirst", None)),
-                                 RunningPosition=item.get("RunningPosition", None),
-                                 Sec1DBL=item.get("Sec1DBL", None),
-                                 Sec2DBL=item.get("Sec2DBL", def_DBL),
-                                 Sec3DBL=item.get("Sec3DBL", def_DBL),
-                                 Sec4DBL=item.get("Sec4DBL", def_DBL),
-                                 Sec5DBL=item.get("Sec5DBL", def_DBL),
-                                 Sec6DBL=item.get("Sec6DBL", def_DBL),
-                                 FinishTime=item.get("FinishTime", def_time),
-                                 Sec1Time=item.get("Sec1time", def_time),
-                                 Sec2Time=item.get("Sec2time", def_time),
-                                 Sec3Time=item.get("Sec3time", def_time),
-                                 Sec4Time=item.get("Sec4time", def_time),
-                                 Sec5Time=item.get("Sec5time", def_time),
-                                 Sec6Time=item.get("Sec6time", def_time),
-                                 WinOdds=item.get("Winodds", None),
-                                 HorseReport=item.get("HorseReport", None),
-                                 PlaceNum = item.get("PlaceNum", None),
-                                 Place = item.get("Place", None),
-                                 #computations: horseprize, 
-                                 Horseprize = gethorseprize(item.get("PlaceNum", None), item.get("Prizemoney", None)),
-                                 PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]) + item["Horse"]
-
-                                 )
-        #need last updated
-        #do ranks and counts ru. OddsRank, Av Prizemoney Rank, ru.weightbelowtop
-        #  ra. FieldSize, ra.dayofweek, ra.isnight, ru.isoace, ru.ismidfield, ru.isleader, isbackmarker, ismadeall, 
-        #is favorite, isoddson, onetrickjockey NOT HK
-        #LBW winners = 2nd x -1
+                                        "ThisDoubleTrioDiv": item.get("ThisDoubleTrioDiv", None), 
+                                        "TripleTrio111Div": item.get("TripleTrio111Div", None),
+                                         "TripleTrio112Div": item.get("TripleTrio112Div", None), 
+                                         "SixUpDiv": item.get("SixUpDiv", None), 
+                                         "SixUpBonusDiv": item.get("SixUpBonusDiv", None)
+                })
 
 
-        #(HKodds wasfavorite, 
+            raceclassid = self.scheduler.get_id(
+                Raceclass, "Name", 
+                {
+                    "Name": item.get("Raceclass", None) 
+                })
+
+            railtypeid = self.scheduler.get_id(
+                Railtype, "Name",
+                {
+                    "Name": item.get("Railtype", None)
+                })
+                                                                                   
+            goingid = self.scheduler.get_id(
+                Going, "Name",
+                {
+                    "Name": item.get("Going", None)
+
+                })                                                                      
+            distanceid = self.scheduler.get_id(
+                Distance, "MetricName",
+
+                {
+                "MetricName": int(item.get("Distance", 0)),
+                "Miles": float(float(item.get("Distance", 0))/1600.0),
+                "Furlongs": int(int(item.get("Distance", 0))/200)
+                })                                                                                  
+                                                                 
+            # gearid = self.scheduler.get_id(
+            #     Gear, "name",
+            #     {
+            #         "name": item["Gear"]
+            #     })
+
+            trainerid = self.scheduler.get_id(
+                Trainer, "Name",
+                {
+
+                    "Name": item["Trainer"],
+                    "Homecountry": "HKG"
+                })    
+
+            jockeyid = self.scheduler.get_id(
+                Jockey, "Name",
+                {
+
+                    "Name": item["Jockey"],
+                    "Homecountry": "HKG"
+                })
 
 
-        #do historical comparison for times table noFUPs, noFS, noMdns, noLSWS,
-    
-        try:
-            session.add(trackwork)
-            session.commit()
-        except:
-            session.rollback()
-            raise
-        finally:
-            session.close()
+            horseid=self.scheduler.get_id( 
+                Horse, "Code",
+                {
+                "Code": item["HorseCode"], 
+                "Name": item["Horse"],
+                "Homecountry": "HKG"
 
-        return item
+                })
 
-    def get_id(self, session, model, unique, fields):
-        fval = fields[unique]
-        id = self.cache[model][fval]
-        if id is None:
-            # log.msg("[%s] %s cache missed for '%s'" % (self.__class__.__name__, model, fval), logLevel=log.DEBUG)
-            try:
-                id = session.query(model).filter(getattr(model, unique) == fval).one().id
-            except exc.NoResultFound:
-                item = model(**fields)
-                session.add(item)
-                session.flush()
-                session.refresh(item)
-                id = item.id
-            self.cache[model][fval] = id
-        # else:
-        # log.msg("[%s] %s cache hit for '%s'" % (self.__class__.__name__, model, fval), logLevel=log.DEBUG)
-        return id
+            hkdividendid = yield hkdividendid
+            raceclassid = yield raceclassid
+            railtypeid = yield railtypeid
+            goingid = yield goingid
+            distanceid = yield distanceid
+
+            raceid = self.scheduler.get_id(
+                HKRace, "PublicRaceIndex",
+                {
+                "Url": item.get("Url", None),
+                "RacecourseCode": item["RacecourseCode"],
+                "RaceDate": item["RaceDate"],
+                "Name": item["Name"],
+               # "Inraceimage": item["images"],
+               # "Inraceimage": item["images"][0]['data'],
+                "RaceNumber": int(item["RaceNumber"]),
+                "PublicRaceIndex": item["RacecourseCode"] +
+                   item["RaceDate"] + str(item["RaceNumber"]),
+                "IncidentReport": item.get("IncidentReport", None),
+                "RaceIndex": item.get("RaceIndex", None),
+                "Prizemoney": item.get("Prizemoney", None),
+                "Raceratingspan": item.get("Raceratingspan", None),
+                "Surface": item.get("Surface", None),
+                "Dayofweek": item.get("Dayofweek", None),
+                "NoSectionals": getnosectionals(item.get("Distance", 0)), 
+                "Goingid": goingid,
+                "Raceclassid": raceclassid,
+                "Railtypeid": railtypeid,
+                "Distanceid": distanceid,
+                "HKDividendid": hkdividendid
+
+                })
+
+
+            # ownerid = yield ownerid
+  
+            jockeyid = yield jockeyid
+            horseid = yield horseid
+            raceid = yield raceid
+            trainerid  = yield trainerid
+
+
+            runner = HKRunner(
+                HorseNumber=item.get("HorseNumber", def_int),
+                Jockey=item["Jockey"],
+                Trainer=item["Trainer"],
+                ActualWt=item["ActualWt"],
+                DeclarHorseWt=item["DeclarHorseWt"],
+                Draw=item.get("Draw", None),
+                LBW = item.get("LBW", None),
+                isScratched = item.get("isScratched", None),
+                 # LBW= getLBW(item.get("LBW", None),item.get("Place", None), item.get("LBWFirst", None)),
+                RunningPosition=item.get("RunningPosition", None),
+                Sec1DBL=item.get("Sec1DBL", None),
+                Sec2DBL=item.get("Sec2DBL", def_DBL),
+                Sec3DBL=item.get("Sec3DBL", def_DBL),
+                Sec4DBL=item.get("Sec4DBL", def_DBL),
+                Sec5DBL=item.get("Sec5DBL", def_DBL),
+                Sec6DBL=item.get("Sec6DBL", def_DBL),
+                FinishTime=item.get("FinishTime", def_time),
+                Sec1Time=item.get("Sec1time", def_time),
+                Sec2Time=item.get("Sec2time", def_time),
+                Sec3Time=item.get("Sec3time", def_time),
+                Sec4Time=item.get("Sec4time", def_time),
+                Sec5Time=item.get("Sec5time", def_time),
+                Sec6Time=item.get("Sec6time", def_time),
+                WinOdds=item.get("Winodds", None),
+                HorseReport=item.get("HorseReport", None),
+                PlaceNum = item.get("PlaceNum", None),
+                Place = item.get("Place", None),
+                Horseprize = gethorseprize(item.get("PlaceNum", None), item.get("Prizemoney", None)),
+                PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]) + item["Horse"],
+                Raceid=raceid,
+                Jockeyid= jockeyid,
+                Trainerid=trainerid,
+                Horseid=horseid)
+
+            self.scheduler.save(runner)
+
+        returnValue(item)
+
+
 
 # @dbdefer
 class ByteStorePipeline(ImagesPipeline):

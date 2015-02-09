@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-__author__ = 'Vince'
 #/Users/vmac/RACING1/HKG/scrapers/dist/hkjc
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, UniqueConstraint, CheckConstraint, Time, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,26 +7,24 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.pool import SingletonThreadPool
 #for Oracle, Firebird
-from sqlalchemy import Sequence
+from sqlalchemy import *
 import settings
 
 
 #for multithreading
 # from twisted.web import xmlrpc, server
 # from twisted.internet import reactor
-from twisted.internet.defer import Deferred
-from sa_decorators import DBDefer
-
+Base = declarative_base()
+engine = create_engine(URL(**settings.DATABASE))
+metadata = MetaData(bind=engine)
 
 ModelBase = declarative_base()
-
-#create ALL models here for DB
 
 
 
 class EventType(ModelBase):
     __tablename__ = "hk_trackwork_type"
-    id = Column(Integer, Sequence('id_seq'), primary_key=True)
+    id = Column(Integer, primary_key=True)
     Name = Column("name", String(100), unique=True)
     UniqueConstraint('name', name='EventTypeName_uidx')
 
@@ -35,7 +32,7 @@ class EventType(ModelBase):
 class Owner(ModelBase):
     __tablename__ = "owner"
     __tableargs__ = ( CheckConstraint('Homecountry in ("HKG", "SIN", "AUS", "NZL", "RSA". "ENG", "IRE", "DUB", "IRE", "SCO", "MAC")'))
-    id = Column(Integer, Sequence('id_seq'), primary_key=True)
+    id = Column(Integer, primary_key=True)
     Name = Column("name", String(255), unique=True)
     Homecountry = Column('homecountry', String(3), nullable=False)
     UniqueConstraint('name', name='OwnerName_uidx')
@@ -93,10 +90,10 @@ class HKTrackwork(ModelBase):
     EventVenue = Column("eventvenue", String(100))
     EventDescription = Column("eventdescription", String(255))
     EventTypeid = Column("eventtypeid", Integer, ForeignKey('hk_trackwork_type.id'))
-    Ownerid = Column("ownerid", Integer, ForeignKey("owner.id"))
+    # Ownerid = Column("ownerid", Integer, ForeignKey("owner.id"))
     Gearid = Column("gearid", Integer, ForeignKey("hk_gear.id"))
     Horseid = Column("horseid", Integer, ForeignKey('horse.id'))
-    UniqueConstraint('eventdate', 'eventdescription', 'horseid', name='HKTrackwork_EventDateDescrHorseId_uidx')
+    UniqueConstraint('eventdate', 'eventtypeid', 'gearid', 'horseid', name='HKTrackwork_EventDateTypeIdGearIdHorseId_uidx')
 
 class HKVet(ModelBase):
     __tablename__ = "hk_vet"
@@ -106,6 +103,20 @@ class HKVet(ModelBase):
     Details = Column("details", String(255))
     PassedDate = Column("passeddate", Date, nullable=False)
     UniqueConstraint('eventdate', 'details', 'horseid', name='HKVet_EventDateDetailsHorseId_uidx')
+
+# class HKTrackwork(ModelBase):
+#     __tablename__ = "hk_trackwork"
+#     id = Column(Integer, primary_key=True)
+#     eventdate = Column("eventdate", Date, nullable=False)
+#     eventvenue = Column("eventvenue", String(100))
+#     eventdescription = Column("eventdescription", String(255))
+#     eventtypeid = Column(
+#         "eventtypeid", Integer, ForeignKey('hk_trackwork_type.id'))
+#     ownerid = Column("ownerid", Integer, ForeignKey("owner.id"))
+#     gearid = Column("gearid", Integer, ForeignKey("hk_gear.id"))
+#     horseid = Column("horseid", Integer, ForeignKey('horse.id'))
+#     UniqueConstraint('eventdate', 'eventdescription',
+#                      'horseid', name='HKTrackwork_EventDateDescrHorseId_uidx')
 
 
 class Jockey(ModelBase):
@@ -178,7 +189,7 @@ class HKDividend(ModelBase):
     TierceDiv = Column("tiercediv", Float, nullable=True)
     TrioDiv = Column("triodiv", Float, nullable=True)
     FirstfourDiv = Column("firstfourdiv", Float, nullable=True)
-    #optionals
+    #optionals FirstFourDiv
     QuartetDiv = Column("quartetdiv", Float)
     ThisDouble11Div = Column("thisdouble11div", Float)
     ThisDouble12Div = Column("thisdouble12div", Float)
