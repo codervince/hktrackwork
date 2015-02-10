@@ -16,20 +16,18 @@ from spiders import *
 
 pp = pprint.PrettyPrinter(indent=4)
 
-def setup_crawler(date, coursecode):
-    pp.pprint("%s -> %s", (date, coursecode)) 
-    spider = ResultsSpider(date=date, coursecode=coursecode)
-    settings = get_project_settings()
-    crawler = Crawler(settings)
-    crawler.configure()
-    crawler.crawl(spider)
-    crawler.start()
+# def setup_crawler(date, coursecode):
+#     pp.pprint("%s -> %s", (date, coursecode)) 
+#     spider = ResultsSpider(date=date, coursecode=coursecode)
+#     settings = get_project_settings()
+#     crawler = Crawler(settings)
+#     crawler.configure()
+#     crawler.crawl(spider)
+#     crawler.start()
 
 
 #rotates to new file 1 per day
 #LOGGING
-twistedlog.startLogging(DailyLogFile.fromFullPath("/Users/vmac/RACING1/HKG/scrapers/dist/hkjc/logs/twistedlog.log"))
-thescrapylog.start()
 
 # def runSpider(date, coursecode):
 # 	os.system("scrapy crawl results -a date=" + date +" -a coursecode=" + coursecode + "")
@@ -52,8 +50,12 @@ thescrapylog.start()
 # 	pp.pprint(k, races[k])
 # 	setup_crawler(k, races[k])
 # reactor.run
+#curl http://localhost:6800/schedule.json -d project=hkjc -d spider=results -d setting=DOWNLOAD_DELAY=2 -d date=20150101 -d coursecode='ST'
+# os.system("curl http://localhost:6800/schedule.json -d project=hkjc -d spider=results -d setting=DOWNLOAD_DELAY=2 -d date=" + ,coursecode=\"ST\"")
+
+
 mynewraces = {}
-with open('HKraces.csv', mode='r') as infile:
+with open('HKraces1415.csv', mode='r') as infile:
     reader = csv.reader(infile)
     for row in reader:
     	k,v = row
@@ -73,7 +75,10 @@ for r in mynewraces:
 	# crawler.crawl(spider)
 	# crawler.start()
 	# log.start()
-	os.system("scrapy crawl results -a date=" + r +" -a coursecode=" + mynewraces[r] + "")
+	#use scrapyd 
+	os.system("curl http://localhost:6800/schedule.json -d project=hkjc -d spider=results -d setting=DOWNLOAD_DELAY=2 -d date=" + str(r) + ",coursecode=" + str(mynewraces[r]))
+
+	# os.system("scrapy crawl results -a date=" + r +" -a coursecode=" + mynewraces[r] + "")
 	# reactor.run()
 
 # for k in races:

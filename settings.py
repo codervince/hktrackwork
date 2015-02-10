@@ -48,7 +48,7 @@ DATABASE = {'drivername': 'postgres',
             'port': '5432',
             'username': 'vmac',
             'password': '',
-            'database': 'hkraces'}
+            'database': 'hkraces60'}
 
 #mysql testing
 #DATABASE = {'drivername': 'sqlite', 'database': 'db.sqlite'}

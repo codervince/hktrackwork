@@ -140,7 +140,10 @@ class Trainer(ModelBase):
 class HKRace(ModelBase):
     __tablename__ = "hk_race"
     __tableargs__ = ( 
-        CheckConstraint('RacecourseCode in ("HV", "ST")'), UniqueConstraint('PublicRaceIndex'), {'autoload': True})
+        CheckConstraint('RacecourseCode in ("HV", "ST")'), {'autoload': True},
+        UniqueConstraint('publicraceindex', name='HKRace_PublicRaceIndex_uidx')
+
+        )
     id = Column(Integer, primary_key=True)
     Url = Column('url', String)
     RacecourseCode = Column('racecoursecode', String, nullable=False)
@@ -148,7 +151,7 @@ class HKRace(ModelBase):
     RaceDate = Column('racedate', Date, nullable=True)
     RaceDateTime = Column('racedatetime', String, nullable=True)
     RaceNumber = Column('racenumber', Integer, nullable=False)
-    PublicRaceIndex = Column('publicraceindex', String, nullable=False)
+    PublicRaceIndex = Column('publicraceindex', String, nullable=False, unique=True)
     RaceIndex = Column('raceindex', String, nullable=True)
     IncidentReport = Column('incidentreport', String, nullable=True)
     Goingid = Column("goingid", Integer, ForeignKey("hk_going.id"))
@@ -163,7 +166,7 @@ class HKRace(ModelBase):
     Isnight = Column("isnight", Boolean)       #from raceday
     NoSectionals = Column('nosectionals', Integer)
     Inraceimage = Column('inraceimage', BYTEA, nullable=True)
-    UniqueConstraint('publicraceindex', name='HKRace_PublicRaceIndex_uidx')
+    # UniqueConstraint('publicraceindex', name='HKRace_PublicRaceIndex_uidx')
 
 
 

@@ -41,7 +41,7 @@ def processplace(place):
     # r_dh = r'.*[0-9].*DH$'
     if place is None:
         return None
-    elif "DH" in place:
+    if "DH" in place:
         return int(place.replace("DH", ''))
     else:
         return 
@@ -149,6 +149,8 @@ class ResultsItemsLoader(ItemLoader):
     Sec6DBL_out = Compose(default_output_processor, horselengthprocessor)
     RaceNumber_out = Compose(default_output_processor, try_int)
     HorseNumber_out = Compose(default_output_processor, try_int)
+    DeclarHorseWt_out = Compose(default_output_processor, try_int)
+
     # image_urls_out = MapCompose(_cleanurl) 
     RunningPosition_out = Join(' ')
     image_urls_out = Compose(identity)
@@ -159,15 +161,20 @@ class ResultsSpider(scrapy.Spider):
     name = "results"
     allowed_domains = ["hkjc.com"]
     start_url = "http://racing.hkjc.com/racing/Info/meeting/Results/english/Local/%s/%s/1"
-
-    def __init__(self, date=None, coursecode=None):
-        if date is None or coursecode is None:
-            raise ValueError("Invalid spider parameters")
-        self.racedate = date
-        self.racecode = coursecode
-        logfile = open('testlog2.log', 'w')
-        log_observer = ScrapyFileLogObserver(logfile, level=logging.DEBUG)
-        log_observer.start()
+    
+    #scrapyd safe
+    def __init__(self, **kwargs):
+        for k,v in kwargs.items():
+            self.racedate = kwargs.get('date')
+            self.racecode = kwargs.get('coursecode')
+    # def __init__(self, date=None, coursecode=None,**kwargs):
+        # if date is None or coursecode is None:
+        #     raise ValueError("Invalid spider parameters")
+        # self.racedate = date
+        # self.racecode = coursecode
+        # logfile = open('testlog2.log', 'w')
+        # log_observer = ScrapyFileLogObserver(logfile, level=logging.DEBUG)
+        # log_observer.start()
 
     def parse(self, response):
         if not len(response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']")):
@@ -252,7 +259,9 @@ class ResultsSpider(scrapy.Spider):
                     l.add_value("HorseReport", '..'.join(getHorseReport(ir, h)))
                     l.add_value("IncidentReport", ir)
                 #table starts here
-                l.add_xpath("Place", "./td[1]/text()")
+                theplace = response.xpath("./td[1]/text()").extract()
+                # l.add_xpath("Place", "./td[1]/text()")
+                l.add_value("Place", theplace)
                 l.add_xpath("PlaceNum", "./td[1]/text()")
                 l.add_xpath("HorseNumber", "./td[2]/text()")
                 l.add_xpath("Horse", "./td[3]/a/text()")
