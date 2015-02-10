@@ -415,6 +415,5 @@ class ResultsSpider(scrapy.Spider):
 
 
     def start_requests(self):
-        print "FOOO"
         return [Request(self.start_url % (self.racedate, self.racecode))]
 
