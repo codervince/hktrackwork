@@ -15,8 +15,8 @@ NEWSPIDER_MODULE = 'hkjc.spiders'
 
 # ITEM_PIPELINES = {'scrapy.contrib.pipeline.images.ImagesPipeline': 1}
 ITEM_PIPELINES = {
-    "hkjc.pipelines.MyImagesPipeline":1,
-    # "hkjc.pipelines.ByteStorePipeline":1,
+    # "hkjc.pipelines.MyImagesPipeline":1,
+    "hkjc.pipelines.ByteStorePipeline":1,
     "hkjc.pipelines.SQLAlchemyPipeline": 10
     # 'scrapy.contrib.pipeline.images.ImagesPipeline': 1
     # "hkjc.pipelines.NoInRaceImagePipeLine": 20, 

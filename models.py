@@ -85,8 +85,13 @@ class Horse(ModelBase):
 
 class HKTrackwork(ModelBase):
     __tablename__ = "hk_trackwork"
+    __tableargs__ = ( 
+        UniqueConstraint('publicraceindex', name='HKTrackwork_PublicRaceIndex_uidx')
+    )
+
     id = Column(Integer, primary_key=True)
     EventDate = Column("eventdate", Date, nullable=False)
+    PublicRaceIndex = Column('publicraceindex', String, nullable=False, unique=True)
     EventVenue = Column("eventvenue", String(100))
     EventDescription = Column("eventdescription", String(255))
     EventTypeid = Column("eventtypeid", Integer, ForeignKey('hk_trackwork_type.id'))
@@ -97,8 +102,13 @@ class HKTrackwork(ModelBase):
 
 class HKVet(ModelBase):
     __tablename__ = "hk_vet"
+    __tableargs__ = ( 
+        UniqueConstraint('publicraceindex', name='HKVetPublicRaceIndex_uidx')
+    )
+
     id = Column(Integer, primary_key=True)
     Horseid = Column("horseid", Integer, ForeignKey('horse.id'))
+    PublicRaceIndex = Column('publicraceindex', String, nullable=False, unique=True)
     EventDate = Column("eventdate", Date, nullable=False)
     Details = Column("details", String(255))
     PassedDate = Column("passeddate", Date, nullable=False)
@@ -176,11 +186,16 @@ class HKRace(ModelBase):
 
 class HKDividend(ModelBase):
     __tablename__ = "hk_dividend"
+    __tableargs__ = ( 
+        UniqueConstraint('publicraceindex', name='HKDividend_PublicRaceIndex_uidx')
+    )
+
+
     id = Column(Integer, primary_key=True)
     RacecourseCode = Column('racecoursecode', String, nullable=False)
     RaceDate = Column('racedate', String, nullable=False)
     RaceNumber = Column('racenumber', String, nullable=False)
-    PublicRaceIndex = Column('publicraceindex', String, nullable=False)
+    PublicRaceIndex = Column('publicraceindex', String, nullable=False, unique=True)
     WinDiv= Column("windiv", Float, nullable=False)
     Place1Div = Column("place1div",Float, nullable=True)
     Place2Div = Column("place2div", Float, nullable=True)
@@ -207,8 +222,13 @@ class HKDividend(ModelBase):
 
 class HKRunner(ModelBase):
     __tablename__ = "hk_runner"
+
+    __tableargs__ = ( 
+        UniqueConstraint('publicraceindex', name='HKRunner_PublicRaceIndex_uidx')
+    )
+
     id = Column(Integer, primary_key=True)
-    PublicRaceIndex = Column('publicraceindex', String, nullable=False)
+    PublicRaceIndex = Column('publicraceindex', String, nullable=False, unique=True)
     Raceid = Column("raceid", Integer, ForeignKey("hk_race.id"))
     Horseid = Column("horseid", Integer, ForeignKey("horse.id"))
     PlaceNum = Column('placenum', String)
@@ -254,7 +274,6 @@ class HKRunner(ModelBase):
     Horseprize = Column('horseprize',Float, nullable=True)
     HorseReport = Column('horsereport', String, nullable=True)
     HorseColors = Column('horsecolors', BYTEA, nullable=True)
-    UniqueConstraint('publicraceindex', name='HKRunner_PublicRaceIndex_uidx')
 
 #OTHER TABLES
 

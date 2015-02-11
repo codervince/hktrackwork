@@ -9,7 +9,7 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 import settings
 import pprint
 from datetime import datetime
-#remove ALchemy dependency?
+
 from sqlalchemy.engine.url import URL
 
 #returns a connection

@@ -407,7 +407,7 @@ class SQLAlchemyPipeline(object):
                 "RaceDate": item["RaceDate"],
                 "Name": item["Name"],
                # "Inraceimage": item["images"],
-               # "Inraceimage": item["images"][0]['data'],
+               "Inraceimage": item["images"][0]['data'] if item["images"] else None,
                 "RaceNumber": int(item["RaceNumber"]),
                 "PublicRaceIndex": item["RacecourseCode"] +
                    item["RaceDate"] + str(item["RaceNumber"]),
@@ -474,9 +474,10 @@ class SQLAlchemyPipeline(object):
 
         returnValue(item)
 
+'''
+usage instructions:
+'''
 
-
-# @dbdefer
 class ByteStorePipeline(ImagesPipeline):
   def media_downloaded(self, response, request, info):
         referer = request.headers.get('Referer')
