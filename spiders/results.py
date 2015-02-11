@@ -180,7 +180,7 @@ class ResultsSpider(scrapy.Spider):
         if not len(response.css("table.draggable").xpath(".//tr[@class='trBgGrey' or @class='trBgWhite']")):
             log.msg("Results page not ready, waiting 2 secs...", logLevel=log.INFO)
             sleep(2)
-            yield Request(response.url)
+            yield Request(response.url, dont_filter=True)
         else:
             for link in LinkExtractor(restrict_xpaths="//div[contains(@class,'raceNum')]", deny=(r'.*/Simulcast/.*')).extract_links(response)[:-1]:
                 yield Request(link.url)

@@ -62,7 +62,7 @@ with open('HKraces1415.csv', mode='r') as infile:
     	mynewraces = {rows[0]:rows[1] for rows in reader}
 
 # pp.pprint(mynewraces)
-#log completed 
+#log completed
 for r in mynewraces:
 	# print r
 	# pp.pprint("%s --> %s" % (r, races[r]))
@@ -79,13 +79,15 @@ for r in mynewraces:
 	#vmac$ curl http://localhost:6800/schedule.json -d project=hkjc -d spider=results -d date=20150101 -d coursecode=ST
 	#currently: 20141220-d/None/1
 	os.system("curl http://localhost:6800/schedule.json -d project=hkjc -d spider=results -d setting=DOWNLOAD_DELAY=2 -d date=" + r + " -d coursecode=" + mynewraces[r])
+	# os.system("curl http://localhost:6800/schedule.json -d project=hkjc -d spider=results -d setting=DOWNLOAD_DELAY=2 -d date=" + str(r) + ",coursecode=" + str(mynewraces[r]))
+
 
 	# os.system("scrapy crawl results -a date=" + r +" -a coursecode=" + mynewraces[r] + "")
 	# reactor.run()
 
 # for k in races:
-# 	os.system("scrapy crawl results -a date=" + k +" -a coursecode=" + races[k] + "")
-# 	time.sleep(5)
+	# os.system("scrapy crawl results -a date=" + r +" -a coursecode=" + mynewraces[r] + "")
+	# time.sleep(1)
 
 #read from dictionary fill command line and run scrapy
 # 20140608,ST
