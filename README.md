@@ -29,7 +29,6 @@
 
 '''python
 
-
 3. Yielding only object after some date. 
 
 This is the code from horses2.py file
@@ -40,5 +39,4 @@ This is the code from horses2.py file
                     for j, k in enumerate(('EventDate', 'EventType', 'EventVenue', 'EventDescription', 'Gear')):
                         item[k] = tf(r.xpath("./td[%s]/font/text()" % (j+1)).extract()).replace("\xc2\xa0", " ").strip()
                     item["EventDate"] = datetime.strptime(item["EventDate"], "%d/%m/%Y").date()
-                    yield item
-'''
+                    yield item'''

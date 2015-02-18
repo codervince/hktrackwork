@@ -138,8 +138,9 @@ class ResultsItemsLoader(ItemLoader):
     Sec6time_out = Compose(default_output_processor, timeprocessor)
     LBW_out = Compose(default_output_processor, horselengthprocessor)
     Draw_out = Compose(default_output_processor, try_int)
-    Place_out = Compose(default_output_processor, processplace)
-    PlaceNum_out = Compose(default_output_processor)
+    Place_out = Compose(default_output_processor)
+    # Place_out = Compose(default_output_processor)
+    # PlaceNum_out = Compose(default_output_processor)
     HorseNumber_out = Compose(default_output_processor, noentryprocessor)
     Sec1DBL_out = Compose(default_output_processor, horselengthprocessor)
     Sec2DBL_out = Compose(default_output_processor, horselengthprocessor)
@@ -259,10 +260,11 @@ class ResultsSpider(scrapy.Spider):
                     l.add_value("HorseReport", '..'.join(getHorseReport(ir, h)))
                     l.add_value("IncidentReport", ir)
                 #table starts here
-                theplace = response.xpath("./td[1]/text()").extract()
+                
                 # l.add_xpath("Place", "./td[1]/text()")
-                l.add_value("Place", theplace)
-                l.add_xpath("PlaceNum", "./td[1]/text()")
+            
+                # l.add_xpath("Place", "./td[1]/text()")
+                l.add_xpath("Place", "./td[1]/text()")
                 l.add_xpath("HorseNumber", "./td[2]/text()")
                 l.add_xpath("Horse", "./td[3]/a/text()")
                 l.add_xpath("HorseCode", "./td[3]/text()", re="\((.+?)\)")

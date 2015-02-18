@@ -19,7 +19,7 @@ from twisted.internet.threads import deferToThreadPool
 from twisted.python.threadable import isInIOThread
 from twisted.python.threadpool import ThreadPool
 from datetime import datetime, date
-
+import re
 import scrapy
 import pprint
 from scrapy.contrib.pipeline.images import ImagesPipeline
@@ -221,6 +221,28 @@ def getLBW(lbw, place, LBWFirst):
     else:
         return lbw
 
+def getplace(place):
+    # r_dh = r'.*[0-9].*DH$'
+    if "DH" in place:
+        return int(re.sub(r'[^\d.]', '', place))
+        # return int(placenum.replace("DH", ''))
+    else:
+        return 
+        {
+    "WV": 99,
+    "WV-A": 99,
+    "WX": 99,
+    "WX-A": 99,
+    "UV": 99,
+    "DISQ": 99,
+    "FE": 99,
+    "DNF":99,
+    "PU": 99,
+    "TNP":99,
+    "UR": 99,
+    }.get(str(place), int(place))
+
+
 def getnosectionals(distance):
     if distance is None or distance == 0:
         return 0
@@ -256,39 +278,39 @@ def gethorseprize(placenum, prizemoney):
     }.get(str(placenum), 0.0)
 #inraceimage one per race
 # @dbdefer
-class MyImagesPipeline(ImagesPipeline):
+# class MyImagesPipeline(ImagesPipeline):
    
-    def file_path(self, request, response=None, info=None):
-        #item=request.meta['item'] # Like this you can use all from item, not just url.
-        #http://www.hkjc.com/english/racing/finishphoto.asp?racedate=20141220R1_L.jpg
-        image_id = request.url.split('/')[-1]
-        # image_id = request.meta.get('Inracename')
-        #get name
-        return 'full/%s' % (image_id)
-    # def set_filename(self, response):
-    #     # pp.pprint(response.meta)
-    #     theurl = response.meta["RacecourseCode"][0] + response.meta["RaceDate"][0] + response.meta["RaceNumber"][0]
-    #     #add a regex here to check the title is valid for a filename.
-    #     return 'full/{0}.jpg'.format(theurl)   
+#     def file_path(self, request, response=None, info=None):
+#         #item=request.meta['item'] # Like this you can use all from item, not just url.
+#         #http://www.hkjc.com/english/racing/finishphoto.asp?racedate=20141220R1_L.jpg
+#         image_id = request.url.split('/')[-1]
+#         # image_id = request.meta.get('Inracename')
+#         #get name
+#         return 'full/%s' % (image_id)
+#     # def set_filename(self, response):
+#     #     # pp.pprint(response.meta)
+#     #     theurl = response.meta["RacecourseCode"][0] + response.meta["RaceDate"][0] + response.meta["RaceNumber"][0]
+#     #     #add a regex here to check the title is valid for a filename.
+#     #     return 'full/{0}.jpg'.format(theurl)   
 
-    # def get_images(self, response, request, info):
-    #     for key, image, buf in super(MyImagesPipeLine, self).get_images(response, request, info):
-    #         key = self.set_filename(response)
-    #     yield key, image, buf
+#     # def get_images(self, response, request, info):
+#     #     for key, image, buf in super(MyImagesPipeLine, self).get_images(response, request, info):
+#     #         key = self.set_filename(response)
+#     #     yield key, image, buf
 
-    def get_media_requests(self, item, info):
-        try:
-            for image in item['image_urls']:
-                yield scrapy.Request(image)
-        except:
-            None        
+#     def get_media_requests(self, item, info):
+#         try:
+#             for image in item['image_urls']:
+#                 yield scrapy.Request(image)
+#         except:
+#             None        
 
-    def item_completed(self, results, item, info):
-        image_urls = [x['url'] for ok,x in results if ok]
-        if not image_urls:
-            raise DropItem("no images in this item: sucks")
-        item['image_urls'] = image_urls
-        return item 
+#     def item_completed(self, results, item, info):
+#         image_urls = [x['url'] for ok,x in results if ok]
+#         if not image_urls:
+#             raise DropItem("no images in this item: sucks")
+#         item['image_urls'] = image_urls
+#         return item 
 
 class SQLAlchemyPipeline(object):
 
@@ -407,6 +429,7 @@ class SQLAlchemyPipeline(object):
                 "RaceDate": item["RaceDate"],
                 "Name": item["Name"],
                # "Inraceimage": item["images"],
+                # "Inraceimage": item["images"][0]['data'],
                "Inraceimage": item["images"][0]['data'] if item["images"] else None,
                 "RaceNumber": int(item["RaceNumber"]),
                 "PublicRaceIndex": item["RacecourseCode"] +
@@ -418,12 +441,11 @@ class SQLAlchemyPipeline(object):
                 "Surface": item.get("Surface", None),
                 "Dayofweek": item.get("Dayofweek", None),
                 "NoSectionals": getnosectionals(item.get("Distance", 0)), 
-                "Goingid": goingid,
-                "Raceclassid": raceclassid,
-                "Railtypeid": railtypeid,
-                "Distanceid": distanceid,
-                "HKDividendid": hkdividendid
-
+                "hk_going_id": goingid,
+                "hk_raceclass_id": raceclassid,
+                "hk_railtype_id": railtypeid,
+                "hk_distance_id": distanceid,
+                "hk_dividend_id": hkdividendid
                 })
 
 
@@ -461,14 +483,14 @@ class SQLAlchemyPipeline(object):
                 Sec6Time=item.get("Sec6time", def_time),
                 WinOdds=item.get("Winodds", None),
                 HorseReport=item.get("HorseReport", None),
-                PlaceNum = item.get("PlaceNum", None),
+                PlaceNum = getplace(item.get("Place", None)),
                 Place = item.get("Place", None),
                 Horseprize = gethorseprize(item.get("PlaceNum", None), item.get("Prizemoney", None)),
                 PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]) + item["Horse"],
-                Raceid=raceid,
-                Jockeyid= jockeyid,
-                Trainerid=trainerid,
-                Horseid=horseid)
+                hk_race_id=raceid,
+                jockey_id= jockeyid,
+                trainer_id=trainerid,
+                horse_id=horseid)
 
             self.scheduler.save(runner)
 
