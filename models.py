@@ -1,3 +1,5 @@
+#OUTSOURCE THIS TO racespg.py
+
 # -*- coding: utf-8 -*-
 #/Users/vmac/RACING1/HKG/scrapers/dist/hkjc
 from sqlalchemy import create_engine, Column, Integer, String, Date, ForeignKey, UniqueConstraint, CheckConstraint, Time, Float, Boolean
