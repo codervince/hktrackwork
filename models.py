@@ -24,6 +24,7 @@ ModelBase = declarative_base()
 
 
 
+
 class EventType(ModelBase):
     __tablename__ = "hk_trackwork_type"
     id = Column(Integer, primary_key=True)
@@ -197,6 +198,38 @@ class HKRace(ModelBase):
     # UniqueConstraint('publicraceindex', name='HKRace_PublicRaceIndex_uidx')
     # odds = relationship("HKOdds", backref="hk_race")
 
+###THIS IS AN INTERNAL TABLE
+class HKRaceResults(ModelBase):
+    __tablename__ = "_hk_race_results"
+    __tableargs__ = ( 
+        CheckConstraint('RacecourseCode in ("HV", "ST")'), {'autoload': True},
+        UniqueConstraint('publicraceindex', name='HKRaceResults_PublicRaceIndex_uidx')
+
+        )
+    id = Column(Integer, primary_key=True)
+    Url = Column('url', String)
+    RacecourseCode = Column('racecoursecode', String, nullable=False)
+    Name = Column('name', String(255), nullable=True)
+    RaceDate = Column('racedate', Date, nullable=True)
+    RaceDateTime = Column('racedatetime', String, nullable=True)
+    RaceNumber = Column('racenumber', Integer, nullable=False)
+    PublicRaceIndex = Column('publicraceindex', String, nullable=False, unique=True)
+    RaceIndex = Column('raceindex', String, nullable=True)
+    IncidentReport = Column('incidentreport', String, nullable=True)
+    hk_going_id = Column("goingid", Integer, ForeignKey("hk_going.id"))
+    hk_raceclass_id = Column("raceclassid", Integer, ForeignKey("hk_raceclass.id"))
+    hk_distance_id = Column("distanceid", Integer, ForeignKey("hk_distance.id"))
+    hk_railtype_id = Column("railtypeid", Integer, ForeignKey("hk_railtype.id"))
+    hk_dividend_id = Column("hkdividendid", Integer, ForeignKey("hk_dividend.id"))
+    Raceratingspan = Column("raceratingspan", String)
+    Prizemoney = Column("prizemoney", Integer)
+    Surface = Column('surface', String)
+    Dayofweek = Column('dayofweek', String)
+    Isnight = Column("isnight", Boolean)       #from raceday
+    NoSectionals = Column('nosectionals', Integer)
+    Inraceimage = Column('inraceimage', BYTEA, nullable=True)
+
+
     def __repr__(self):
         return "HKRace(Racecoursecode='%s', Name= '%s', RaceDate='%s', RaceNumber='%d', RaceIndex='%s',Prizemoney='%s')" % \
         (self.RacecourseCode, self.Name, self.RaceDate, self.RaceNumber, self.RaceIndex, self.RaceIndex, self.Prizemoney)  
@@ -294,6 +327,64 @@ class HKRunner(ModelBase):
     HorseReport = Column('horsereport', String, nullable=True)
     HorseColors = Column('horsecolors', BYTEA, nullable=True)
     odds = relationship("HKOdds", backref="hk_runner")
+
+#use use this to store results then update runner race from here
+
+class HKRunnerResults(ModelBase):
+    __tablename__ = "_hk_runner_results"
+
+    __tableargs__ = ( 
+        UniqueConstraint('publicraceindex', name='HKRunnerResults_PublicRaceIndex_uidx')
+    )
+
+    id = Column(Integer, primary_key=True)
+    PublicRaceIndex = Column('publicraceindex', String, nullable=False, unique=True)
+    isScratched = Column('isscratched', Boolean)
+    hk_race_id = Column("raceid", Integer, ForeignKey("hk_race.id"))
+    horse_id = Column("horseid", Integer, ForeignKey("horse.id"))
+    hk_gear_id = Column("gearid", Integer, ForeignKey("hk_gear.id"))
+    owner_id = Column("ownerid", Integer, ForeignKey("owner.id"))
+    jockey_id =Column("jockeyid", Integer, ForeignKey("jockey.id"))
+    trainer_id =Column("trainerid", Integer, ForeignKey("trainer.id"))
+    PlaceNum = Column('placenum', Integer)
+    Place = Column('place', String)
+    HorseNumber= Column('horsenumber', String, nullable=True)
+    Jockey= Column('jockey', String, nullable=True)
+    JockeyWtOver = Column('jockeywtover', Integer, nullable=True)
+    Trainer= Column('trainer', String, nullable=True)
+    ActualWt= Column('actualWt', Integer, nullable=True)
+    DeclarHorseWt= Column('declarhorsewt', Integer, nullable=True)
+    HorseWtDeclarChange = Column('horsewtdeclarchange', Integer, nullable=True)
+    HorseWtpc = Column('horsewtpc', Float, nullable=True)
+    Draw= Column('draw', Integer, nullable=True)
+    LBW= Column('lbw', Float, nullable=True)
+    Last6runs = Column('last6runs', String(30), nullable=True)
+    Priority = Column('priority', String(10), nullable=True)
+    RunningPosition= Column('runningposition', String, nullable=True)
+    Rating =Column('rating', Integer, nullable=True)
+    RatingChangeL1 = Column('ratingchangeL1', Integer, nullable=True)
+    SeasonStakes = Column('seasonStakes', Integer, nullable=True)
+    Age = Column('age', Integer, nullable=True)  #from raceday
+    WFA = Column('wfa', Integer, nullable=True)
+    isRanOn = Column('isranon', Boolean, nullable=True)
+    Sec1DBL = Column('sec1dbl', Float, nullable=True)
+    Sec2DBL = Column('sec2dbl', Float, nullable=True)
+    Sec3DBL = Column('sec3dblL', Float, nullable=True)
+    Sec4DBL = Column('sec4dbl', Float, nullable=True)
+    Sec5DBL = Column('sec5dbl', Float, nullable=True)
+    Sec6DBL = Column('sec6dbl', Float, nullable=True)
+    FinishTime= Column('finishtime', Time, nullable=True)  #e.g. 1.49.08 --> '00:01:49.08' hhmmss.nn always < 5mins
+    Sec1Time = Column('sec1time', Time, nullable=True)
+    Sec2Time = Column('sec2time', Time, nullable=True)
+    Sec3Time = Column('sec3time', Time, nullable=True)
+    Sec4Time = Column('sec4time', Time, nullable=True)
+    Sec5Time = Column('sec5time', Time, nullable=True)
+    Sec6Time = Column('sec6time', Time, nullable=True)
+    WinOdds= Column('winodds', Float, nullable=True)
+    Horseprize = Column('horseprize',Float, nullable=True)
+    HorseReport = Column('horsereport', String, nullable=True)
+    HorseColors = Column('horsecolors', BYTEA, nullable=True)
+    # odds = relationship("HKOdds", backref="hk_runner_results")
 #OTHER TABLES
 
 # class RaceStats(ModelBase):

@@ -313,53 +313,48 @@ def gethorseprize(placenum, prizemoney):
 #         return item 
 
 class SQLAlchemyPipeline(object):
-
     def __init__(self):
-
         self.scheduler = DBScheduler()
 
     @inlineCallbacks
-    def process_item(self, item, spider): 
-            
+    def process_item(self, item, spider):
         if isinstance(item, ResultsItem):
-
             hkdividendid = self.scheduler.get_id(
                 HKDividend, 'PublicRaceIndex',
                 {
                     "PublicRaceIndex": item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]),
-                                        "RaceDate": item["RaceDate"], 
-                                        "RaceNumber": item["RaceNumber"],
-                                        "RacecourseCode": item.get("RacecourseCode", None),
-                                        "PublicRaceIndex": item["RacecourseCode"] +
-                   item["RaceDate"] + str(item["RaceNumber"]),
-                                        "WinDiv": item.get("WinDiv", None), 
-                                       "Place1Div":item.get("Place1Div"), 
-                                       "Place2Div": item.get("Place2Div", None), 
-                                       "Place3Div":item.get("Place3Div", None),
-                                        "QNDiv": item.get("QNDiv", None), 
-                                        "QP12Div": item.get("QP12Div"), 
-                                        "QP13Div": item.get("QP13Div", None), 
-                                        "QP23Div": item.get("QP23Div", None),  
-                                        "TierceDiv": item.get("TierceDiv"), 
-                                        "TrioDiv": item.get("TrioDiv", None), 
-                                        "FirstfourDiv": item.get("FirstfourDiv", None), 
-                                        "QuartetDiv": item.get("QuartetDiv", None),
-                                        "ThisDouble11Div": item.get("ThisDouble11Div", None), 
-                                        "ThisDouble12Div": item.get("ThisDouble12Div",None),
-                                        "Treble111Div": item.get("Treble111Div", None), 
-                                        "Treble112Div": item.get("Treble112Div",None),
-                                        "ThisDoubleTrioDiv": item.get("ThisDoubleTrioDiv", None), 
-                                        "TripleTrio111Div": item.get("TripleTrio111Div", None),
-                                         "TripleTrio112Div": item.get("TripleTrio112Div", None), 
-                                         "SixUpDiv": item.get("SixUpDiv", None), 
-                                         "SixUpBonusDiv": item.get("SixUpBonusDiv", None)
+                    "RaceDate": item["RaceDate"],
+                    "RaceNumber": item["RaceNumber"],
+                    "RacecourseCode": item.get("RacecourseCode", None),
+                    "PublicRaceIndex": item["RacecourseCode"] +
+                                       item["RaceDate"] + str(item["RaceNumber"]),
+                    "WinDiv": item.get("WinDiv", None),
+                    "Place1Div": item.get("Place1Div"),
+                    "Place2Div": item.get("Place2Div", None),
+                    "Place3Div": item.get("Place3Div", None),
+                    "QNDiv": item.get("QNDiv", None),
+                    "QP12Div": item.get("QP12Div"),
+                    "QP13Div": item.get("QP13Div", None),
+                    "QP23Div": item.get("QP23Div", None),
+                    "TierceDiv": item.get("TierceDiv"),
+                    "TrioDiv": item.get("TrioDiv", None),
+                    "FirstfourDiv": item.get("FirstfourDiv", None),
+                    "QuartetDiv": item.get("QuartetDiv", None),
+                    "ThisDouble11Div": item.get("ThisDouble11Div", None),
+                    "ThisDouble12Div": item.get("ThisDouble12Div", None),
+                    "Treble111Div": item.get("Treble111Div", None),
+                    "Treble112Div": item.get("Treble112Div", None),
+                    "ThisDoubleTrioDiv": item.get("ThisDoubleTrioDiv", None),
+                    "TripleTrio111Div": item.get("TripleTrio111Div", None),
+                    "TripleTrio112Div": item.get("TripleTrio112Div", None),
+                    "SixUpDiv": item.get("SixUpDiv", None),
+                    "SixUpBonusDiv": item.get("SixUpBonusDiv", None)
                 })
 
-
             raceclassid = self.scheduler.get_id(
-                Raceclass, "Name", 
+                Raceclass, "Name",
                 {
-                    "Name": item.get("Raceclass", None) 
+                    "Name": item.get("Raceclass", None)
                 })
 
             railtypeid = self.scheduler.get_id(
@@ -367,22 +362,22 @@ class SQLAlchemyPipeline(object):
                 {
                     "Name": item.get("Railtype", None)
                 })
-                                                                                   
+
             goingid = self.scheduler.get_id(
                 Going, "Name",
                 {
                     "Name": item.get("Going", None)
 
-                })                                                                      
+                })
             distanceid = self.scheduler.get_id(
                 Distance, "MetricName",
 
                 {
-                "MetricName": int(item.get("Distance", 0)),
-                "Miles": float(float(item.get("Distance", 0))/1600.0),
-                "Furlongs": int(int(item.get("Distance", 0))/200)
-                })                                                                                  
-                                                                 
+                    "MetricName": int(item.get("Distance", 0)),
+                    "Miles": float(float(item.get("Distance", 0)) / 1600.0),
+                    "Furlongs": int(int(item.get("Distance", 0)) / 200)
+                })
+
             # gearid = self.scheduler.get_id(
             #     Gear, "name",
             #     {
@@ -395,7 +390,7 @@ class SQLAlchemyPipeline(object):
 
                     "Name": item["Trainer"],
                     "Homecountry": "HKG"
-                })    
+                })
 
             jockeyid = self.scheduler.get_id(
                 Jockey, "Name",
@@ -405,13 +400,12 @@ class SQLAlchemyPipeline(object):
                     "Homecountry": "HKG"
                 })
 
-
-            horseid=self.scheduler.get_id( 
+            horseid = self.scheduler.get_id(
                 Horse, "Code",
                 {
-                "Code": item["HorseCode"], 
-                "Name": item["Horse"],
-                "Homecountry": "HKG"
+                    "Code": item["HorseCode"],
+                    "Name": item["Horse"],
+                    "Homecountry": "HKG"
 
                 })
 
@@ -424,77 +418,263 @@ class SQLAlchemyPipeline(object):
             raceid = self.scheduler.get_id(
                 HKRace, "PublicRaceIndex",
                 {
-                "Url": item.get("Url", None),
-                "RacecourseCode": item["RacecourseCode"],
-                "RaceDate": item["RaceDate"],
-                "Name": item["Name"],
-               # "Inraceimage": item["images"],
-                # "Inraceimage": item["images"][0]['data'],
-               "Inraceimage": item["images"][0]['data'] if item["images"] else None,
-                "RaceNumber": int(item["RaceNumber"]),
-                "PublicRaceIndex": item["RacecourseCode"] +
-                   item["RaceDate"] + str(item["RaceNumber"]),
-                "IncidentReport": item.get("IncidentReport", None),
-                "RaceIndex": item.get("RaceIndex", None),
-                "Prizemoney": item.get("Prizemoney", None),
-                "Raceratingspan": item.get("Raceratingspan", None),
-                "Surface": item.get("Surface", None),
-                "Dayofweek": item.get("Dayofweek", None),
-                "NoSectionals": getnosectionals(item.get("Distance", 0)), 
-                "hk_going_id": goingid,
-                "hk_raceclass_id": raceclassid,
-                "hk_railtype_id": railtypeid,
-                "hk_distance_id": distanceid,
-                "hk_dividend_id": hkdividendid
+                    "Url": item.get("Url", None),
+                    "RacecourseCode": item["RacecourseCode"],
+                    "RaceDate": item["RaceDate"],
+                    "Name": item["Name"],
+                    # "Inraceimage": item["images"],
+                    # "Inraceimage": item["images"][0]['data'],
+                    "Inraceimage": item["images"][0]['data'] if item["images"] else None,
+                    "RaceNumber": int(item["RaceNumber"]),
+                    "PublicRaceIndex": item["RacecourseCode"] +
+                                       item["RaceDate"] + str(item["RaceNumber"]),
+                    "IncidentReport": item.get("IncidentReport", None),
+                    "RaceIndex": item.get("RaceIndex", None),
+                    "Prizemoney": item.get("Prizemoney", None),
+                    "Raceratingspan": item.get("Raceratingspan", None),
+                    "Surface": item.get("Surface", None),
+                    "Dayofweek": item.get("Dayofweek", None),
+                    "NoSectionals": getnosectionals(item.get("Distance", 0)),
+                    "hk_going_id": goingid,
+                    "hk_raceclass_id": raceclassid,
+                    "hk_railtype_id": railtypeid,
+                    "hk_distance_id": distanceid,
+                    "hk_dividend_id": hkdividendid
                 })
 
 
             # ownerid = yield ownerid
-  
+
             jockeyid = yield jockeyid
             horseid = yield horseid
             raceid = yield raceid
-            trainerid  = yield trainerid
+            trainerid = yield trainerid
 
-
-            runner = HKRunner(
-                HorseNumber=item.get("HorseNumber", def_int),
-                Jockey=item["Jockey"],
-                Trainer=item["Trainer"],
-                ActualWt=item["ActualWt"],
-                DeclarHorseWt=item["DeclarHorseWt"],
-                Draw=item.get("Draw", None),
-                LBW = item.get("LBW", None),
-                isScratched = item.get("isScratched", None),
-                 # LBW= getLBW(item.get("LBW", None),item.get("Place", None), item.get("LBWFirst", None)),
-                RunningPosition=item.get("RunningPosition", None),
-                Sec1DBL=item.get("Sec1DBL", None),
-                Sec2DBL=item.get("Sec2DBL", def_DBL),
-                Sec3DBL=item.get("Sec3DBL", def_DBL),
-                Sec4DBL=item.get("Sec4DBL", def_DBL),
-                Sec5DBL=item.get("Sec5DBL", def_DBL),
-                Sec6DBL=item.get("Sec6DBL", def_DBL),
-                FinishTime=item.get("FinishTime", def_time),
-                Sec1Time=item.get("Sec1time", def_time),
-                Sec2Time=item.get("Sec2time", def_time),
-                Sec3Time=item.get("Sec3time", def_time),
-                Sec4Time=item.get("Sec4time", def_time),
-                Sec5Time=item.get("Sec5time", def_time),
-                Sec6Time=item.get("Sec6time", def_time),
-                WinOdds=item.get("Winodds", None),
-                HorseReport=item.get("HorseReport", None),
-                PlaceNum = getplace(item.get("Place", None)),
-                Place = item.get("Place", None),
-                Horseprize = gethorseprize(item.get("PlaceNum", None), item.get("Prizemoney", None)),
-                PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]) + item["Horse"],
-                hk_race_id=raceid,
-                jockey_id= jockeyid,
-                trainer_id=trainerid,
-                horse_id=horseid)
-
-            self.scheduler.save(runner)
-
+            self.scheduler.get_id(HKRunner,
+                                  "PublicRaceIndex",
+                                  dict(HorseNumber=item.get("HorseNumber", def_int),
+                                       Jockey=item["Jockey"],
+                                       Trainer=item["Trainer"],
+                                       ActualWt=item["ActualWt"],
+                                       DeclarHorseWt=item["DeclarHorseWt"],
+                                       Draw=item.get("Draw", None),
+                                       LBW=item.get("LBW", None),
+                                       isScratched=item.get("isScratched", None),
+                                       # LBW= getLBW(item.get("LBW", None),item.get("Place", None), item.get("LBWFirst", None)),
+                                       RunningPosition=item.get("RunningPosition", None),
+                                       Sec1DBL=item.get("Sec1DBL", None),
+                                       Sec2DBL=item.get("Sec2DBL", def_DBL),
+                                       Sec3DBL=item.get("Sec3DBL", def_DBL),
+                                       Sec4DBL=item.get("Sec4DBL", def_DBL),
+                                       Sec5DBL=item.get("Sec5DBL", def_DBL),
+                                       Sec6DBL=item.get("Sec6DBL", def_DBL),
+                                       FinishTime=item.get("FinishTime", def_time),
+                                       Sec1Time=item.get("Sec1time", def_time),
+                                       Sec2Time=item.get("Sec2time", def_time),
+                                       Sec3Time=item.get("Sec3time", def_time),
+                                       Sec4Time=item.get("Sec4time", def_time),
+                                       Sec5Time=item.get("Sec5time", def_time),
+                                       Sec6Time=item.get("Sec6time", def_time),
+                                       WinOdds=item.get("Winodds", None),
+                                       HorseReport=item.get("HorseReport", None),
+                                       PlaceNum=getplace(item.get("Place", None)),
+                                       Place=item.get("Place", None),
+                                       Horseprize=gethorseprize(item.get("PlaceNum", None),
+                                                                item.get("Prizemoney",
+                                                                         None)),
+                                       PublicRaceIndex=item["RacecourseCode"] + item[
+                                           "RaceDate"] + str(item["RaceNumber"]) +
+                                                       item["Horse"],
+                                       hk_race_id=raceid,
+                                       jockey_id=jockeyid,
+                                       trainer_id=trainerid,
+                                       horse_id=horseid))
         returnValue(item)
+
+
+# class SQLAlchemyPipeline(object):
+
+#     def __init__(self):
+
+#         self.scheduler = DBScheduler()
+
+#     @inlineCallbacks
+#     def process_item(self, item, spider): 
+            
+#         if isinstance(item, ResultsItem):
+
+#             hkdividendid = self.scheduler.get_id(
+#                 HKDividend, 'PublicRaceIndex',
+#                 {
+#                     "PublicRaceIndex": item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]),
+#                                         "RaceDate": item["RaceDate"], 
+#                                         "RaceNumber": item["RaceNumber"],
+#                                         "RacecourseCode": item.get("RacecourseCode", None),
+#                                         "PublicRaceIndex": item["RacecourseCode"] +
+#                    item["RaceDate"] + str(item["RaceNumber"]),
+#                                         "WinDiv": item.get("WinDiv", None), 
+#                                        "Place1Div":item.get("Place1Div"), 
+#                                        "Place2Div": item.get("Place2Div", None), 
+#                                        "Place3Div":item.get("Place3Div", None),
+#                                         "QNDiv": item.get("QNDiv", None), 
+#                                         "QP12Div": item.get("QP12Div"), 
+#                                         "QP13Div": item.get("QP13Div", None), 
+#                                         "QP23Div": item.get("QP23Div", None),  
+#                                         "TierceDiv": item.get("TierceDiv"), 
+#                                         "TrioDiv": item.get("TrioDiv", None), 
+#                                         "FirstfourDiv": item.get("FirstfourDiv", None), 
+#                                         "QuartetDiv": item.get("QuartetDiv", None),
+#                                         "ThisDouble11Div": item.get("ThisDouble11Div", None), 
+#                                         "ThisDouble12Div": item.get("ThisDouble12Div",None),
+#                                         "Treble111Div": item.get("Treble111Div", None), 
+#                                         "Treble112Div": item.get("Treble112Div",None),
+#                                         "ThisDoubleTrioDiv": item.get("ThisDoubleTrioDiv", None), 
+#                                         "TripleTrio111Div": item.get("TripleTrio111Div", None),
+#                                          "TripleTrio112Div": item.get("TripleTrio112Div", None), 
+#                                          "SixUpDiv": item.get("SixUpDiv", None), 
+#                                          "SixUpBonusDiv": item.get("SixUpBonusDiv", None)
+#                 })
+
+
+#             raceclassid = self.scheduler.get_id(
+#                 Raceclass, "Name", 
+#                 {
+#                     "Name": item.get("Raceclass", None) 
+#                 })
+
+#             railtypeid = self.scheduler.get_id(
+#                 Railtype, "Name",
+#                 {
+#                     "Name": item.get("Railtype", None)
+#                 })
+                                                                                   
+#             goingid = self.scheduler.get_id(
+#                 Going, "Name",
+#                 {
+#                     "Name": item.get("Going", None)
+
+#                 })                                                                      
+#             distanceid = self.scheduler.get_id(
+#                 Distance, "MetricName",
+
+#                 {
+#                 "MetricName": int(item.get("Distance", 0)),
+#                 "Miles": float(float(item.get("Distance", 0))/1600.0),
+#                 "Furlongs": int(int(item.get("Distance", 0))/200)
+#                 })                                                                                  
+                                                                 
+#             # gearid = self.scheduler.get_id(
+#             #     Gear, "name",
+#             #     {
+#             #         "name": item["Gear"]
+#             #     })
+
+#             trainerid = self.scheduler.get_id(
+#                 Trainer, "Name",
+#                 {
+
+#                     "Name": item["Trainer"],
+#                     "Homecountry": "HKG"
+#                 })    
+
+#             jockeyid = self.scheduler.get_id(
+#                 Jockey, "Name",
+#                 {
+
+#                     "Name": item["Jockey"],
+#                     "Homecountry": "HKG"
+#                 })
+
+
+#             horseid=self.scheduler.get_id( 
+#                 Horse, "Code",
+#                 {
+#                 "Code": item["HorseCode"], 
+#                 "Name": item["Horse"],
+#                 "Homecountry": "HKG"
+
+#                 })
+
+#             hkdividendid = yield hkdividendid
+#             raceclassid = yield raceclassid
+#             railtypeid = yield railtypeid
+#             goingid = yield goingid
+#             distanceid = yield distanceid
+
+#             raceid = self.scheduler.get_id(
+#                 HKRace, "PublicRaceIndex",
+#                 {
+#                 "Url": item.get("Url", None),
+#                 "RacecourseCode": item["RacecourseCode"],
+#                 "RaceDate": item["RaceDate"],
+#                 "Name": item["Name"],
+#                # "Inraceimage": item["images"],
+#                 # "Inraceimage": item["images"][0]['data'],
+#                "Inraceimage": item["images"][0]['data'] if item["images"] else None,
+#                 "RaceNumber": int(item["RaceNumber"]),
+#                 "PublicRaceIndex": item["RacecourseCode"] +
+#                    item["RaceDate"] + str(item["RaceNumber"]),
+#                 "IncidentReport": item.get("IncidentReport", None),
+#                 "RaceIndex": item.get("RaceIndex", None),
+#                 "Prizemoney": item.get("Prizemoney", None),
+#                 "Raceratingspan": item.get("Raceratingspan", None),
+#                 "Surface": item.get("Surface", None),
+#                 "Dayofweek": item.get("Dayofweek", None),
+#                 "NoSectionals": getnosectionals(item.get("Distance", 0)), 
+#                 "hk_going_id": goingid,
+#                 "hk_raceclass_id": raceclassid,
+#                 "hk_railtype_id": railtypeid,
+#                 "hk_distance_id": distanceid,
+#                 "hk_dividend_id": hkdividendid
+#                 })
+
+
+#             # ownerid = yield ownerid
+  
+#             jockeyid = yield jockeyid
+#             horseid = yield horseid
+#             raceid = yield raceid
+#             trainerid  = yield trainerid
+
+
+#             runner = HKRunnerResults(
+#                 HorseNumber=item.get("HorseNumber", def_int),
+#                 Jockey=item["Jockey"],
+#                 Trainer=item["Trainer"],
+#                 ActualWt=item["ActualWt"],
+#                 DeclarHorseWt=item["DeclarHorseWt"],
+#                 Draw=item.get("Draw", None),
+#                 LBW = item.get("LBW", None),
+#                 isScratched = item.get("isScratched", None),
+#                  # LBW= getLBW(item.get("LBW", None),item.get("Place", None), item.get("LBWFirst", None)),
+#                 RunningPosition=item.get("RunningPosition", None),
+#                 Sec1DBL=item.get("Sec1DBL", None),
+#                 Sec2DBL=item.get("Sec2DBL", def_DBL),
+#                 Sec3DBL=item.get("Sec3DBL", def_DBL),
+#                 Sec4DBL=item.get("Sec4DBL", def_DBL),
+#                 Sec5DBL=item.get("Sec5DBL", def_DBL),
+#                 Sec6DBL=item.get("Sec6DBL", def_DBL),
+#                 FinishTime=item.get("FinishTime", def_time),
+#                 Sec1Time=item.get("Sec1time", def_time),
+#                 Sec2Time=item.get("Sec2time", def_time),
+#                 Sec3Time=item.get("Sec3time", def_time),
+#                 Sec4Time=item.get("Sec4time", def_time),
+#                 Sec5Time=item.get("Sec5time", def_time),
+#                 Sec6Time=item.get("Sec6time", def_time),
+#                 WinOdds=item.get("Winodds", None),
+#                 HorseReport=item.get("HorseReport", None),
+#                 PlaceNum = getplace(item.get("Place", None)),
+#                 Place = item.get("Place", None),
+#                 Horseprize = gethorseprize(item.get("PlaceNum", None), item.get("Prizemoney", None)),
+#                 PublicRaceIndex = item["RacecourseCode"] + item["RaceDate"] + str(item["RaceNumber"]) + item["Horse"],
+#                 hk_race_id=raceid,
+#                 jockey_id= jockeyid,
+#                 trainer_id=trainerid,
+#                 horse_id=horseid)
+
+#             self.scheduler.save(runner)
+
+#         returnValue(item)
 
 '''
 usage instructions:

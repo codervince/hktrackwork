@@ -319,7 +319,7 @@ class ResultsSpider(scrapy.Spider):
                 r_findqp23Div = r'.*QUINELLA PLACE$'
                 r_finddble = r'.*DOUBLE.*'
                 r_findtrble = r'.*TREBLE.*'
-                r_finddbletrio = r'.*DOUBLE TRIO.*'
+                r_finddbletrio = r'.*DOUBLE TRIO$'
                 r_findtripletrio = r'TRIPLE TRIO$'
                 r_findquartet = r'.*QUARTET.*'
                 r_findsixup = r'.*SIX UP.*'
@@ -350,8 +350,12 @@ class ResultsSpider(scrapy.Spider):
                         #last race
                         l.add_value("Treble111Div", oddspath[14].extract().replace(',', ''))
                         l.add_value("Treble112Div", oddspath[15].extract().replace(',', ''))
-                        l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
-                        l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
+                        if hasdbletrio:
+                            #issues here with http://racing.hkjc.com/racing/Info/Meeting/Results/English/Local/20150204/HV/8
+                            l.add_value("ThisDoubleTrioDiv", oddspath[16].extract().replace(',', ''))
+                            l.add_value("SixUpDiv", oddspath[17].extract().replace(',', ''))
+                        else:
+                            l.add_value("SixUpDiv", oddspath[16].extract().replace(',', ''))
                         try: 
                             l.add_value("SixUpBonusDiv", oddspath[18].extract().replace(',', ''))
                         except:
