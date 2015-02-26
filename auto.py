@@ -55,7 +55,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 mynewraces = {}
-with open('HKraces1415.csv', mode='r') as infile:
+with open('HKraces0708.csv', mode='r') as infile:
     reader = csv.reader(infile)
     for row in reader:
     	k,v = row
